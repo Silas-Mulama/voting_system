@@ -139,10 +139,17 @@
             background: var(--primary-light);
             border: none;
             color: var(--primary);
-            width: 36px; height: 36px;
+            width: 36px; 
+            height: 36px;
+            min-width: 44px;
+            min-height: 44px;
             border-radius: 8px;
             cursor: pointer;
             transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
         }
 
         .logout-btn {
@@ -286,6 +293,12 @@
             cursor: pointer;
             position: absolute;
             right: 1.5rem;
+            padding: 0.5rem;
+            min-height: 44px;
+            min-width: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* --- Main Content Area --- */

@@ -212,8 +212,16 @@
     display: flex;
     align-items: center;
     gap: 5px;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    transition: 0.2s;
+    min-height: 40px;
 }
-.btn-manage:hover { gap: 10px; transition: 0.2s; }
+.btn-manage:hover { gap: 10px; background: var(--primary-light); }
+
+.btn-create {
+    min-height: 44px;
+}
 
 /* Empty State */
 .empty-state {
@@ -243,13 +251,15 @@
 
 @media (max-width: 576px) {
     .section-header h2 { font-size: 1.25rem; }
-    .btn-create { width: 100%; justify-content: center; }
+    .btn-create { width: 100%; justify-content: center; padding: 0.65rem 1.25rem; min-height: 44px; font-size: 0.9rem; }
     .card-body h3 { font-size: 1rem; }
     .description { font-size: 0.8rem; }
     .timeline-item { font-size: 0.75rem; }
     .status-badge { font-size: 0.65rem; padding: 3px 10px; }
     .empty-state { padding: 3rem 1rem; }
     .empty-icon { font-size: 3rem; }
+    .btn-manage { padding: 0.6rem 0.75rem; font-size: 0.85rem; }
+    .card-footer { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
 }
 </style>
 {% endblock %}
