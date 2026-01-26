@@ -1,0 +1,186 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}Audit Logs - eVoting System{% endblock %}
+
+{% block content %}
+<div class="audit-container">
+    <header class="section-header">
+        <div class="header-left">
+            <h2>System Audit Trail</h2>
+            <p class="text-muted">A comprehensive ledger of all security-sensitive operations and user activities.</p>
+        </div>
+        <div class="header-right">
+            <a href="{% url 'audit_logs_export' %}" class="btn-export">
+                <i class="fas fa-file-download"></i> Export CSV
+            </a>
+        </div>
+    </header>
+
+    <section class="filters-card">
+        <form method="get" class="filters-grid">
+            <div class="input-group">
+                <label><i class="fas fa-tag"></i> Activity Type</label>
+                <select name="action" class="custom-select">
+                    <option value="">All Activities</option>
+                    <option value="login" {% if request.GET.action == 'login' %}selected{% endif %}>User Login</option>
+                    <option value="logout" {% if request.GET.action == 'logout' %}selected{% endif %}>User Logout</option>
+                    <option value="login_failed" {% if request.GET.action == 'login_failed' %}selected{% endif %}>⚠️ Failed Login</option>
+                    <option value="password_change" {% if request.GET.action == 'password_change' %}selected{% endif %}>Security Update</option>
+                    <option value="vote_cast" {% if request.GET.action == 'vote_cast' %}selected{% endif %}>Vote Cast</option>
+                    <option value="student_upload" {% if request.GET.action == 'student_upload' %}selected{% endif %}>Bulk Import</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label><i class="fas fa-search"></i> Entity Search</label>
+                <input type="text" name="search" placeholder="Email or Admission ID..." class="custom-input" value="{{ request.GET.search }}">
+            </div>
+            
+            <div class="filter-actions">
+                <button type="submit" class="btn-filter">Apply Filters</button>
+                <a href="{% url 'audit_logs' %}" class="btn-reset">Reset</a>
+            </div>
+        </form>
+    </section>
+
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="audit-table">
+                <thead>
+                    <tr>
+                        <th>Event Time</th>
+                        <th>User Identity</th>
+                        <th>Action Performed</th>
+                        <th>Detailed Context</th>
+                        <th>Network IP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in audit_logs %}
+                        <tr class="log-entry">
+                            <td class="col-time">
+                                <strong>{{ log.timestamp|date:"M d, Y" }}</strong>
+                                <span>{{ log.timestamp|date:"H:i:s" }}</span>
+                            </td>
+                            <td class="col-user">
+                                {% if log.user %}
+                                    <div class="user-info">
+                                        <span class="user-main">{{ log.user.full_name }}</span>
+                                        <span class="user-tag {% if log.user.is_student %}tag-student{% else %}tag-admin{% endif %}">
+                                            {{ log.user.is_student|yesno:"Student,Admin" }}
+                                        </span>
+                                    </div>
+                                {% else %}
+                                    <span class="system-tag"><i class="fas fa-cog"></i> System</span>
+                                {% endif %}
+                            </td>
+                            <td class="col-action">
+                                <span class="action-pill pill-{{ log.action }}">
+                                    {% for val, label in action_choices %}
+                                        {% if val == log.action %}{{ label }}{% endif %}
+                                    {% endfor %}
+                                </span>
+                            </td>
+                            <td class="col-desc">
+                                <p title="{{ log.description }}">{{ log.description|truncatewords:12 }}</p>
+                            </td>
+                            <td class="col-ip">
+                                <code>{{ log.ip_address|default:"127.0.0.1" }}</code>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="empty-row">
+                                <i class="fas fa-history"></i>
+                                <p>No records found matching your current filters.</p>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% if is_paginated %}
+        <nav class="pagination-container">
+            <div class="pagination-stats">
+                Showing <strong>{{ page_obj.start_index }}</strong> to <strong>{{ page_obj.end_index }}</strong> of {{ paginator.count }}
+            </div>
+            <div class="pagination-buttons">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1{% if request.GET.action %}&action={{ request.GET.action }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" class="page-btn"><i class="fas fa-angle-double-left"></i></a>
+                    <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.action %}&action={{ request.GET.action }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" class="page-btn">Prev</a>
+                {% endif %}
+
+                <span class="page-current">Page {{ page_obj.number }}</span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if request.GET.action %}&action={{ request.GET.action }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" class="page-btn">Next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.action %}&action={{ request.GET.action }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" class="page-btn"><i class="fas fa-angle-double-right"></i></a>
+                {% endif %}
+            </div>
+        </nav>
+    {% endif %}
+</div>
+
+<style>
+.audit-container { max-width: 1250px; margin: 0 auto; }
+
+/* Header & Actions */
+.btn-export { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
+.btn-export:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+
+/* Filter Section */
+.filters-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; }
+.filters-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 1.5rem; align-items: flex-end; }
+.input-group label { display: block; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+.custom-select, .custom-input { width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-body); color: var(--text-main); font-size: 0.95rem; }
+
+.btn-filter { background: var(--primary); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; }
+.btn-reset { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; margin-left: 10px; }
+
+/* Table Styling */
+.table-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; }
+.audit-table { width: 100%; border-collapse: collapse; }
+.audit-table th { background: var(--bg-body); padding: 1rem; text-align: left; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+.audit-table td { padding: 1.25rem 1rem; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
+
+.col-time { display: flex; flex-direction: column; line-height: 1.2; }
+.col-time span { font-size: 0.8rem; color: var(--text-muted); font-family: monospace; }
+
+.user-info { display: flex; flex-direction: column; gap: 4px; }
+.user-main { font-weight: 700; color: var(--text-main); }
+.user-tag, .system-tag { font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 4px; width: fit-content; text-transform: uppercase; }
+.tag-student { background: #e0f2fe; color: #0369a1; }
+.tag-admin { background: #fef3c7; color: #92400e; }
+.system-tag { background: #f3f4f6; color: #374151; }
+
+/* Action Pills */
+.action-pill { padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
+.pill-login { background: #dcfce7; color: #166534; }
+.pill-login_failed { background: #fee2e2; color: #991b1b; animation: pulse 2s infinite; }
+.pill-vote_cast { background: #f3e8ff; color: #7e22ce; }
+.pill-student_upload { background: #e0e7ff; color: #3730a3; }
+
+.col-ip code { background: var(--bg-body); padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; color: var(--primary); }
+
+/* Pagination Styling */
+.pagination-container { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; }
+.pagination-stats { font-size: 0.9rem; color: var(--text-muted); }
+.pagination-buttons { display: flex; gap: 5px; align-items: center; }
+.page-btn { padding: 8px 16px; background: var(--card-bg); border: 1px solid var(--border-color); text-decoration: none; color: var(--text-main); border-radius: 6px; font-weight: 600; transition: 0.2s; }
+.page-btn:hover { border-color: var(--primary); color: var(--primary); }
+.page-current { padding: 8px 16px; background: var(--primary); color: white; border-radius: 6px; font-weight: 700; }
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+@media (max-width: 900px) {
+    .filters-grid { grid-template-columns: 1fr; }
+    .col-ip, .col-desc { display: none; }
+}
+</style>
+{% endblock %}

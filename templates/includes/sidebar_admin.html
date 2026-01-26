@@ -1,0 +1,195 @@
+<aside class="admin-sidebar-inner">
+    <div class="sidebar-mobile-header">
+        <span>Navigation</span>
+        <button class="close-sidebar" onclick="toggleSidebar()">&times;</button>
+    </div>
+
+    <ul class="sidebar-nav">
+        <li class="nav-item">
+            <a href="{% url 'admin_dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+                <i class="fas fa-th-large"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
+        <li class="nav-header">Management</li>
+        
+        <li class="nav-item">
+            <a href="{% url 'election_list' %}" class="nav-link {% if 'election' in request.resolver_match.url_name and 'results' not in request.resolver_match.url_name %}active{% endif %}">
+                <i class="fas fa-vote-yea"></i>
+                <span>Elections</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{% url 'upload_students' %}" class="nav-link {% if request.resolver_match.url_name == 'upload_students' %}active{% endif %}">
+                <i class="fas fa-users-cog"></i>
+                <span>Import Students</span>
+            </a>
+        </li>
+
+        <li class="nav-header">Analysis</li>
+
+        <li class="nav-item">
+            <a href="{% url 'election_results_admin' %}" class="nav-link {% if 'results' in request.resolver_match.url_name %}active{% endif %}">
+                <i class="fas fa-chart-line"></i>
+                <span>Live Results</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{% url 'audit_logs' %}" class="nav-link {% if request.resolver_match.url_name == 'audit_logs' %}active{% endif %}">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Audit Logs</span>
+            </a>
+        </li>
+
+        <li class="nav-header">System</li>
+
+        <li class="nav-item">
+            <a href="/admin/" class="nav-link" target="_blank">
+                <i class="fas fa-tools"></i>
+                <span>Django Admin</span>
+                <i class="fas fa-external-link-alt external-icon"></i>
+            </a>
+        </li>
+    </ul>
+
+    <div class="sidebar-footer-card">
+        <p>System Status</p>
+        <div class="status-indicator">
+            <span class="dot-online"></span> Secure & Online
+        </div>
+    </div>
+</aside>
+
+<style>
+    .admin-sidebar-inner {
+        padding: 1.5rem 1rem;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .sidebar-mobile-header {
+        display: none;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 1rem;
+    }
+
+    .close-sidebar {
+        background: none;
+        border: none;
+        color: var(--text-main);
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    .sidebar-nav {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        flex: 1;
+    }
+
+    .nav-header {
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        letter-spacing: 1px;
+        margin: 1.5rem 0 0.5rem 0.75rem;
+    }
+
+    .nav-item { margin-bottom: 0.25rem; }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0.85rem 1rem;
+        text-decoration: none;
+        color: var(--text-main);
+        font-size: 0.9rem;
+        font-weight: 500;
+        border-radius: 10px;
+        transition: all 0.2s ease;
+    }
+
+    .nav-link i {
+        width: 20px;
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+    }
+
+    .nav-link:hover i { color: var(--primary); }
+
+    .nav-link.active {
+        background: var(--primary);
+        color: white;
+    }
+
+    .nav-link.active i { color: white; }
+
+    .external-icon {
+        font-size: 0.7rem !important;
+        margin-left: auto;
+        opacity: 0.5;
+    }
+
+    /* Footer Card */
+    .sidebar-footer-card {
+        background: var(--bg-body);
+        padding: 1rem;
+        border-radius: 12px;
+        margin-top: 2rem;
+        border: 1px solid var(--border-color);
+    }
+
+    .sidebar-footer-card p {
+        margin: 0;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--text-muted);
+    }
+
+    .status-indicator {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.8rem;
+        margin-top: 5px;
+        color: var(--text-main);
+    }
+
+    .dot-online {
+        width: 8px;
+        height: 8px;
+        background: #10b981;
+        border-radius: 50%;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+
+    /* Mobile view */
+    @media (max-width: 992px) {
+        .sidebar-mobile-header { display: flex; }
+        .admin-sidebar-inner { padding: 1rem; }
+    }
+
+    @media (max-width: 576px) {
+        .admin-sidebar-inner { padding: 0.75rem; }
+        .nav-link { padding: 0.65rem 0.75rem; font-size: 0.85rem; gap: 10px; }
+        .nav-link i { width: 18px; font-size: 0.95rem; }
+        .nav-header { font-size: 0.65rem; margin: 1rem 0 0.5rem 0.5rem; }
+        .sidebar-footer-card { padding: 0.75rem; margin-top: 1rem; }
+    }
+</style>

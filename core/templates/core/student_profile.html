@@ -1,0 +1,383 @@
+{% extends 'base_student.html' %}
+
+{% block title %}My Profile - eVoting System{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="profile-avatar-large">
+            {% if profile_user.profile_picture %}
+                <img src="{{ profile_user.profile_picture.url }}" alt="Profile picture" class="profile-picture-large">
+            {% else %}
+                {% if profile_user.full_name %}
+                    {{ profile_user.full_name|first|upper }}
+                {% else %}
+                    {{ profile_user.username|first|upper }}
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="profile-header-info">
+            <h1 class="profile-name">{{ profile_user.full_name|default:profile_user.username }}</h1>
+            <p class="profile-admission">Admission: {{ profile_user.admission_number }}</p>
+            <p class="profile-class">Class: {{ profile_user.class_form }}</p>
+        </div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Account Information Card -->
+    <div class="profile-card">
+        <div class="card-header">
+            <h2><i class="fas fa-user"></i> Account Information</h2>
+        </div>
+        <div class="card-body">
+            <div class="info-row">
+                <span class="info-label">Email:</span>
+                <span class="info-value">{{ profile_user.email }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Admission Number:</span>
+                <span class="info-value">{{ profile_user.admission_number }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Class:</span>
+                <span class="info-value">{{ profile_user.class_form }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Account Created:</span>
+                <span class="info-value">{{ account_created|date:"b d, Y" }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Last Updated:</span>
+                <span class="info-value">{{ profile_user.last_login|date:"b d, Y \a\t g:i A"|default:"Never" }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Status:</span>
+                <span class="info-value">
+                    {% if profile_user.is_active %}
+                        <span class="badge badge-success">✓ Active</span>
+                    {% else %}
+                        <span class="badge badge-danger">✗ Inactive</span>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voting Statistics Card -->
+    <div class="profile-card">
+        <div class="card-header">
+            <h2><i class="fas fa-chart-bar"></i> Voting Statistics</h2>
+        </div>
+        <div class="card-body">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">{{ elections_participated }}</div>
+                    <div class="stat-label">Elections Participated</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">{{ vote_count }}</div>
+                    <div class="stat-label">Total Votes Cast</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">{{ pending_elections }}</div>
+                    <div class="stat-label">Elections Pending</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Last Vote</div>
+                    <div class="stat-value">
+                        {% if last_vote_date %}
+                            {{ last_vote_date|date:"b d, Y" }}
+                        {% else %}
+                            No votes yet
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions Card -->
+    <div class="profile-card">
+        <div class="card-header">
+            <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+        </div>
+        <div class="card-body">
+            <div class="actions-grid">
+                <a href="{% url 'student_profile_edit' %}" class="action-btn btn-primary">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </a>
+                <a href="{% url 'student_change_password' %}" class="action-btn btn-secondary">
+                    <i class="fas fa-lock"></i> Change Password
+                </a>
+                <a href="{% url 'elections_list' %}" class="action-btn btn-info">
+                    <i class="fas fa-vote-yea"></i> Go to Voting
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.profile-container {
+    max-width: 700px;
+    margin: 0 auto;
+    color: var(--text-main);
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 2rem;
+}
+
+.profile-avatar-large {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--primary), #818cf8);
+    color: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 800;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.profile-picture-large {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-header-info {
+    flex: 1;
+}
+
+.profile-name {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.profile-admission,
+.profile-class {
+    margin: 0.25rem 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #22c55e;
+}
+
+.alert-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+}
+
+.profile-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.card-header {
+    background: var(--primary-light);
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-header h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.info-value {
+    color: var(--text-muted);
+    text-align: right;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-success {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+}
+
+.badge-danger {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.stat-item {
+    padding: 1rem;
+    background: var(--bg-body);
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.stat-number {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.stat-value {
+    font-size: 0.9rem;
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: var(--border-color);
+    color: var(--text-main);
+}
+
+.btn-secondary:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-info {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.btn-info:hover {
+    background: var(--primary);
+    color: white;
+}
+
+@media (max-width: 600px) {
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .profile-header-info {
+        flex: 1;
+    }
+
+    .info-row {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+
+    .info-value {
+        text-align: left;
+    }
+
+    .stats-grid,
+    .actions-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}

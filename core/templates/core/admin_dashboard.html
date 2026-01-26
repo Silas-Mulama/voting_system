@@ -1,0 +1,271 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}Admin Dashboard - eVoting System{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+    <header class="dashboard-header">
+        <div class="welcome-text">
+            <h1>Welcome Back, {{ user.full_name }}!</h1>
+            <p class="text-muted">Here's what's happening with the eVoting system today.</p>
+        </div>
+        <div class="current-date">
+            <i class="far fa-calendar-alt"></i>
+            <span id="date-display"></span>
+        </div>
+    </header>
+    
+    <div class="stats-grid">
+        <a href="{% url 'election_list' %}" class="stat-card">
+            <div class="stat-icon-wrapper blue">
+                <i class="fas fa-vote-yea"></i>
+            </div>
+            <div class="stat-content">
+                <p class="stat-label">Total Elections</p>
+                <h2 class="stat-number">{{ elections_count }}</h2>
+            </div>
+            <div class="stat-trend">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </a>
+        
+        <a href="{% url 'upload_students' %}" class="stat-card">
+            <div class="stat-icon-wrapper purple">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+                <p class="stat-label">Total Students</p>
+                <h2 class="stat-number">{{ total_students }}</h2>
+            </div>
+            <div class="stat-trend">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </a>
+        
+        <div class="stat-card">
+            <div class="stat-icon-wrapper green">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-content">
+                <p class="stat-label">Active Elections</p>
+                <h2 class="stat-number">{{ active_elections }}</h2>
+            </div>
+        </div>
+    </div>
+    
+    <div class="dashboard-lower-grid">
+        <section class="card quick-actions-section">
+            <div class="card-header">
+                <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+            </div>
+            <div class="actions-flex">
+                <a href="{% url 'election_create' %}" class="btn-action">
+                    <div class="action-icon-box"><i class="fas fa-plus"></i></div>
+                    <span>Create Election</span>
+                </a>
+                <a href="{% url 'election_list' %}" class="btn-action">
+                    <div class="action-icon-box"><i class="fas fa-tasks"></i></div>
+                    <span>Manage Portal</span>
+                </a>
+                <a href="{% url 'upload_students' %}" class="btn-action">
+                    <div class="action-icon-box"><i class="fas fa-user-plus"></i></div>
+                    <span>Add Students</span>
+                </a>
+                <a href="{% url 'election_results_admin' %}" class="btn-action">
+                    <div class="action-icon-box"><i class="fas fa-chart-pie"></i></div>
+                    <span>View Results</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="card system-info">
+            <div class="card-header">
+                <h3><i class="fas fa-shield-alt"></i> System Health</h3>
+            </div>
+            <div class="health-list">
+                <div class="health-item">
+                    <span>Database Connection</span>
+                    <span class="status-pill status-online">Stable</span>
+                </div>
+                <div class="health-item">
+                    <span>Security Protocol</span>
+                    <span class="status-pill status-online">SSL Active</span>
+                </div>
+                <div class="health-item">
+                    <span>Server Load</span>
+                    <span class="status-pill status-low">Low</span>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<style>
+/* Dashboard Specific Styles */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+}
+
+.dashboard-header h1 { font-size: 1.75rem; font-weight: 800; margin: 0; color: var(--text-main); }
+
+.current-date {
+    background: var(--card-bg);
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Stats Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary);
+}
+
+.stat-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.blue { background: #eef2ff; color: #4f46e5; }
+.purple { background: #f5f3ff; color: #7c3aed; }
+.green { background: #ecfdf5; color: #10b981; }
+
+.stat-content { flex: 1; }
+.stat-label { margin: 0; font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+.stat-number { margin: 0; font-size: 1.75rem; font-weight: 800; color: var(--text-main); }
+.stat-trend { color: var(--text-muted); font-size: 0.8rem; }
+
+/* Lower Grid */
+.dashboard-lower-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+}
+
+.card-header h3 { margin: 0 0 1.5rem 0; font-size: 1.1rem; color: var(--text-main); }
+
+.actions-flex {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+}
+
+.btn-action {
+    background: var(--bg-body);
+    border: 1px solid var(--border-color);
+    padding: 1.25rem;
+    border-radius: 12px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-main);
+    transition: 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-action:hover {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.02);
+}
+
+.action-icon-box { font-size: 1.25rem; }
+
+/* Health List */
+.health-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.9rem;
+}
+
+.status-pill {
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+.status-online { background: #dcfce7; color: #166534; }
+.status-low { background: #fef9c3; color: #854d0e; }
+
+@media (max-width: 992px) {
+    .dashboard-lower-grid { grid-template-columns: 1fr; }
+    .dashboard-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .stats-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+}
+
+@media (max-width: 768px) {
+    .dashboard-header h1 { font-size: 1.5rem; }
+    .stat-card { flex-direction: column; text-align: center; }
+    .stat-number { font-size: 1.5rem; }
+    .current-date { font-size: 0.8rem; padding: 0.5rem 0.75rem; }
+    .actions-flex { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+    .btn-action { padding: 1rem; font-size: 0.8rem; }
+}
+
+@media (max-width: 576px) {
+    .dashboard-header h1 { font-size: 1.25rem; }
+    .stats-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+    .stat-card { padding: 1rem; }
+    .stat-icon-wrapper { width: 50px; height: 50px; font-size: 1.2rem; }
+    .stat-label { font-size: 0.75rem; }
+    .stat-number { font-size: 1.5rem; }
+    .welcome-text h1 { font-size: 1.1rem; }
+    .welcome-text p { font-size: 0.8rem; }
+    .card-header h3 { font-size: 1rem; margin: 0 0 1rem 0; }
+    .actions-flex { grid-template-columns: 1fr; }
+    .btn-action { padding: 0.9rem; }
+    .health-item { font-size: 0.8rem; padding: 0.5rem 0; }
+    .status-pill { font-size: 0.65rem; padding: 1px 6px; }
+}
+</style>
+
+<script>
+    // Set current date
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('date-display').textContent = new Date().toLocaleDateString(undefined, options);
+</script>
+{% endblock %}

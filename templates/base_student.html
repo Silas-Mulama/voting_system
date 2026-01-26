@@ -1,0 +1,647 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Student Portal | eVoting{% endblock %}</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Light Theme */
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-light: #eef2ff;
+            --bg-body: #f8fafc;
+            --white: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --shadow-nav: 0 4px 15px -3px rgba(0, 0, 0, 0.07);
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
+            --nav-height: 70px;
+        }
+
+        [data-theme="dark"] {
+            /* Dark Theme */
+            --bg-body: #0f172a;
+            --white: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --card-bg: #1e293b;
+            --primary-light: rgba(79, 70, 229, 0.2);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            transition: background-color 0.3s ease;
+            line-height: 1.5;
+        }
+
+        /* --- Navbar Styling --- */
+        .navbar-student {
+            background: var(--white);
+            border-bottom: 1px solid var(--border-color);
+            height: var(--nav-height);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-nav);
+        }
+
+        .navbar-container {
+            max-width: 1300px;
+            height: 100%;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .brand-text {
+            font-size: 1.25rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary), #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            position: absolute;
+            left: 1.5rem;
+        }
+
+        /* Menu Content Wrapper */
+        .navbar-menu-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex: none;
+            justify-content: center;
+        }
+
+        .navbar-nav {
+            list-style: none;
+            display: flex;
+            gap: 0.75rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        /* User & Theme Actions */
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            padding-left: 1.25rem;
+            border-left: 1px solid var(--border-color);
+            position: absolute;
+            right: 1.5rem;
+        }
+
+        .user-meta {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .user-name { font-weight: 600; font-size: 0.85rem; color: var(--text-main); }
+        .user-id { font-size: 0.7rem; color: var(--text-muted); }
+
+        .theme-toggle-btn {
+            background: var(--primary-light);
+            border: none;
+            color: var(--primary);
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .logout-btn {
+            color: #ef4444;
+            background: #fef2f2;
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Student Profile Dropdown */
+        .student-profile-dropdown {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .profile-trigger {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            transition: 0.2s;
+            background: var(--primary-light);
+        }
+
+        .profile-trigger:hover {
+            background: var(--primary-light);
+        }
+
+        .profile-avatar {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            overflow: hidden;
+        }
+
+        .avatar-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .profile-name { 
+            font-weight: 600; 
+            font-size: 0.8rem; 
+            color: var(--text-main);
+        }
+
+        .profile-admission { 
+            font-size: 0.65rem; 
+            color: var(--text-muted);
+        }
+
+        .profile-trigger i {
+            color: var(--primary);
+            font-size: 0.75rem;
+        }
+
+        /* Profile Dropdown Menu */
+        .profile-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            width: 200px;
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            display: none;
+            padding: 0.5rem;
+            z-index: 1100;
+            pointer-events: auto;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .student-profile-dropdown:hover .profile-dropdown-menu {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .dropdown-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .dropdown-link:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 0.5rem 0;
+        }
+
+        .logout-link { 
+            color: #ef4444;
+        }
+
+        .logout-link:hover { 
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        /* Mobile Toggle Button */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 1.4rem;
+            cursor: pointer;
+            position: absolute;
+            right: 1.5rem;
+        }
+
+        /* --- Main Content Area --- */
+        .portal-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .main-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            min-height: 70vh;
+        }
+        /* --- Footer Styling --- */
+        .portal-footer {
+            background: var(--white);
+            border-top: 1px solid var(--border-color);
+            padding: 4rem 0 2rem;
+            margin-top: 4rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .footer-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1.5fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand .brand-text {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .footer-motto {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            max-width: 300px;
+            line-height: 1.6;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            color: var(--primary);
+            background: var(--primary-light);
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-links h4, .footer-contact h4 {
+            color: var(--text-main);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links ul li { margin-bottom: 0.75rem; }
+
+        .footer-links ul li a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        .footer-links ul li a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .footer-contact p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer-bottom a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* --- Responsive Footer --- */
+        @media (max-width: 992px) {
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+            .footer-brand { grid-column: span 2; }
+        }
+
+        @media (max-width: 576px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-brand { grid-column: span 1; }
+            .portal-footer { padding: 3rem 0 1.5rem; }
+        }
+
+        /* --- RESPONSIVE LOGIC --- */
+        @media (max-width: 992px) {
+            .mobile-toggle { display: block; }
+
+            .navbar-container {
+                justify-content: flex-start;
+            }
+
+            .brand-text {
+                position: relative;
+                left: 0;
+            }
+
+            .navbar-menu-content {
+                display: none; /* Hidden by default */
+                position: absolute;
+                top: var(--nav-height);
+                left: 0;
+                width: 100%;
+                background: var(--white);
+                border-bottom: 1px solid var(--border-color);
+                flex-direction: column;
+                padding: 1.5rem;
+                gap: 1.5rem;
+                align-items: flex-start;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            }
+
+            .navbar-menu-content.show { display: flex; }
+
+            .navbar-nav {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .navbar-actions {
+                position: relative;
+                right: auto;
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+                width: 100%;
+                padding: 1.5rem 0 0 0;
+                justify-content: space-between;
+            }
+
+            .user-meta { text-align: left; }
+        }
+
+        @media (max-width: 576px) {
+            .main-card { padding: 1.25rem; border-radius: 0; border: none; }
+            .portal-container { margin: 0; padding: 0; }
+            .navbar-container { padding: 0 1rem; }
+            .brand-text { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar-student">
+        <div class="navbar-container">
+            <a href="{% url 'student_dashboard' %}" style="text-decoration: none;">
+                <span class="brand-text">eVoting</span>
+            </a>
+
+            <button class="mobile-toggle" id="mobile-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="navbar-menu-content" id="nav-menu">
+                <ul class="navbar-nav">
+                    <li><a href="{% url 'student_dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}">Home</a></li>
+                    <li><a href="{% url 'elections_list' %}" class="nav-link  {% if request.resolver_match.url_name == 'elections_list' %}active{% endif %}">Vote</a></li>
+                    <!-- <li><a href="{% url 'elections_list' %}" class="nav-link {% if request.resolver_match.url_name == 'elections_list' %}active{% endif %}">📊 Results</a></li> -->
+                    
+                    <li class="nav-item">
+                        <a href="{% url 'about' %}" class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+                            <span class="nav-icon"></span>
+                            About
+                        </a>
+                    </li>
+                 
+                </ul>
+
+                <div class="navbar-actions">
+                    <button id="theme-toggle" class="theme-toggle-btn">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    
+                    <!-- Profile Dropdown -->
+                    <div class="student-profile-dropdown">
+                        <div class="profile-trigger">
+                            <div class="profile-avatar">
+                                {% if user.profile_picture %}
+                                    <img src="{{ user.profile_picture.url }}" alt="Profile picture" class="avatar-image">
+                                {% else %}
+                                    {% if user.full_name %}
+                                        {{ user.full_name|first|upper }}
+                                    {% else %}
+                                        {{ user.username|first|upper }}
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            <div class="profile-info">
+                                <span class="profile-name">{{ user.full_name|default:user.username }}</span>
+                                <span class="profile-admission">{{ user.admission_number }}</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        
+                        <div class="profile-dropdown-menu">
+                            <a href="{% url 'student_profile' %}" class="dropdown-link">
+                                <i class="fas fa-user-circle"></i> My Profile
+                            </a>
+                            <a href="{% url 'student_profile_edit' %}" class="dropdown-link">
+                                <i class="fas fa-edit"></i> Edit Profile
+                            </a>
+                            <a href="{% url 'student_change_password' %}" class="dropdown-link">
+                                <i class="fas fa-lock"></i> Change Password
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="{% url 'logout' %}" class="dropdown-link logout-link">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="portal-container">
+        <div class="main-card">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="portal-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <span class="brand-text">eVoting</span>
+                    <p class="footer-motto">Secure, Transparent, and Fair student elections for Butere Technical Training Institute.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="{% url 'student_dashboard' %}">Dashboard</a></li>
+                        <li><a href="{% url 'elections_list' %}">Active Elections</a></li>
+                        <li><a href="{% url 'about' %}">About Platform</a></li>
+                        <li><a href="{% url 'change_password' %}">Security Settings</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h4>Support</h4>
+                    <p><i class="fas fa-envelope"></i> helpdesk@buteretti.ac.ke</p>
+                    <p><i class="fas fa-phone"></i> +254 700 000 000</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Butere, Kenya</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Butere TTI. All Rights Reserved. | <a href="#">Privacy Policy</a></p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // 1. Theme Logic
+        const themeBtn = document.getElementById('theme-toggle');
+        const themeIcon = themeBtn.querySelector('i');
+        const getTheme = () => localStorage.getItem('theme') || 'light';
+
+        const setTheme = (theme) => {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            themeIcon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        };
+
+        setTheme(getTheme());
+
+        themeBtn.addEventListener('click', () => {
+            const nextTheme = getTheme() === 'light' ? 'dark' : 'light';
+            setTheme(nextTheme);
+        });
+
+        // 2. Mobile Menu Toggle
+        const menuBtn = document.getElementById('mobile-toggle');
+        const navMenu = document.getElementById('nav-menu');
+
+        menuBtn.addEventListener('click', (e) => {
+            navMenu.classList.toggle('show');
+            const icon = menuBtn.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+            e.stopPropagation();
+        });
+
+        // Close menu if clicking anywhere else
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && navMenu.classList.contains('show')) {
+                navMenu.classList.remove('show');
+                menuBtn.querySelector('i').className = 'fas fa-bars';
+            }
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

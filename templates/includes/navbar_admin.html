@@ -1,0 +1,249 @@
+<nav class="navbar-admin">
+    <div class="navbar-container">
+        <div class="navbar-left">
+            <button class="mobile-nav-toggle" onclick="toggleSidebar()" title="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <a href="{% url 'admin_dashboard' %}" class="brand-link">
+                <span class="brand-text">eVoting <span class="admin-tag">Admin</span></span>
+            </a>
+        </div>
+        
+        <div class="navbar-right">
+            <button onclick="toggleTheme()" class="theme-toggle-admin" title="Toggle Dark/Light Mode">
+                <i class="fas fa-adjust"></i>
+            </button>
+
+            <div class="navbar-user-dropdown">
+                <div class="user-trigger">
+                    <div class="user-info">
+                        <span class="user-name">{{ user.full_name|default:"Administrator" }}</span>
+                        <span class="user-role">Superuser</span>
+                    </div>
+                    <div class="user-avatar">
+                        {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" alt="Profile picture" class="avatar-image">
+                        {% else %}
+                            {% if user.username %}
+                                {{ user.username|first|upper }}
+                            {% elif user.full_name %}
+                                {{ user.full_name|first|upper }}
+                            {% else %}
+                                A
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="dropdown-menu">
+                    <a href="{% url 'admin_profile' %}" class="dropdown-item">
+                        <i class="fas fa-user-circle"></i> My Profile
+                    </a>
+                    <a href="{% url 'admin_profile_edit' %}" class="dropdown-item">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </a>
+                    <a href="{% url 'admin_change_password' %}" class="dropdown-item">
+                        <i class="fas fa-lock"></i> Change Password
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="/admin/" target="_blank" class="dropdown-item">
+                        <i class="fas fa-cogs"></i> Django System
+                    </a>
+                    <a href="{% url 'activity_log' %}" class="dropdown-item">
+                        <i class="fas fa-history"></i> Activity Log
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{% url 'logout' %}" class="dropdown-item logout-text">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<style>
+    .navbar-admin {
+        height: var(--nav-height);
+        background: var(--white);
+        border-bottom: 1px solid var(--border-color);
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1001;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .navbar-container {
+        max-width: 100%;
+        height: 100%;
+        padding: 0 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .navbar-left, .navbar-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    /* Brand Logo */
+    .brand-link { text-decoration: none; }
+    .brand-text {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: var(--text-main);
+        letter-spacing: -0.5px;
+    }
+    .admin-tag {
+        color: var(--primary);
+        font-size: 0.8rem;
+        background: var(--primary-light);
+        padding: 2px 8px;
+        border-radius: 6px;
+        vertical-align: middle;
+        margin-left: 4px;
+    }
+
+    /* Mobile Toggle */
+    .mobile-nav-toggle {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--text-main);
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0.5rem;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle-admin {
+        background: var(--bg-body);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    .theme-toggle-admin:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+
+    /* User Profile & Dropdown */
+    .navbar-user-dropdown {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .user-trigger {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 5px;
+        border-radius: 12px;
+        transition: 0.2s;
+    }
+
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        text-align: right;
+    }
+
+    .user-name { font-size: 0.85rem; font-weight: 700; color: var(--text-main); }
+    .user-role { font-size: 0.7rem; color: var(--text-muted); }
+
+    .user-avatar {
+        width: 35px;
+        height: 35px;
+        background: var(--primary);
+        color: white;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 0.9rem;
+        overflow: hidden;
+    }
+
+    .avatar-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Dropdown Menu */
+    .dropdown-menu {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        width: 200px;
+        background: var(--white);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        display: none;
+        padding: 0.5rem;
+        z-index: 1100;
+        pointer-events: auto;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .navbar-user-dropdown:hover .dropdown-menu {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0.75rem 1rem;
+        text-decoration: none;
+        color: var(--text-main);
+        font-size: 0.85rem;
+        font-weight: 500;
+        border-radius: 8px;
+        transition: 0.2s;
+    }
+
+    .dropdown-item:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+    }
+
+    .dropdown-divider {
+        height: 1px;
+        background: var(--border-color);
+        margin: 0.5rem 0;
+    }
+
+    .logout-text { color: #ef4444; }
+    .logout-text:hover { background: #fef2f2; color: #dc2626; }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+        .mobile-nav-toggle { display: block; }
+        .user-info { display: none; }
+        .navbar-container { padding: 0 1rem; }
+    }
+
+    @media (max-width: 576px) {
+        .brand-text { font-size: 1rem; }
+        .admin-tag { display: none; }
+        .navbar-container { padding: 0 0.75rem; }
+        .navbar-right { gap: 0.5rem; }
+        .user-avatar { width: 32px; height: 32px; font-size: 0.8rem; }
+    }
+</style>

@@ -1,0 +1,274 @@
+{% extends 'base_student.html' %}
+
+{% block title %}Elections - eVoting System{% endblock %}
+
+{% block content %}
+<div class="elections-section">
+    <div class="elections-header">
+        <div>
+            <h1>Elections</h1>
+            <p class="header-subtitle">Browse and vote in available elections</p>
+        </div>
+        <div class="header-stats">
+            <span class="stat-badge">📊 {{ elections.count }} Election{{ elections.count|pluralize }}</span>
+        </div>
+    </div>
+
+    <div class="filter-tabs">
+        <a href="#" class="filter-tab active" data-filter="all">All Elections</a>
+        <a href="#" class="filter-tab" data-filter="active">Active Only</a>
+        <a href="#" class="filter-tab" data-filter="voted">Your Votes</a>
+    </div>
+    
+    {% if elections %}
+        <div class="elections-list">
+            {% for election in elections %}
+                <div class="election-card status-{{ election.status }}" data-status="{{ election.status }}">
+                    <div class="card-header">
+                        <div class="header-left">
+                            <h3>{{ election.title }}</h3>
+                            <p class="card-description">{{ election.description|truncatewords:15 }}</p>
+                        </div>
+                        <div class="header-right">
+                            <span class="status-pill status-{{ election.status }}">
+                                {% if election.status == 'active' %}
+                                    🔴 Active
+                                {% elif election.status == 'closed' %}
+                                    ⏹️ Closed
+                                {% else %}
+                                    ⏳ Draft
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <div class="election-meta">
+                            <div class="meta-item">
+                                <span class="meta-icon">🕐</span>
+                                <div>
+                                    <span class="meta-label">Start</span>
+                                    <span class="meta-value">{{ election.start_datetime|date:"M d, H:i" }}</span>
+                                </div>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-icon">🕑</span>
+                                <div>
+                                    <span class="meta-label">End</span>
+                                    <span class="meta-value">{{ election.end_datetime|date:"M d, H:i" }}</span>
+                                </div>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-icon">📝</span>
+                                <div>
+                                    <span class="meta-label">Positions</span>
+                                    <span class="meta-value">{{ election.positions.count }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if election.user_vote_count %}
+                            <div class="voting-status-box voted">
+                                <span class="status-icon">✓</span>
+                                <!-- <span class="status-text">You have voted for {{ election.user_vote_count }} position{{ election.user_vote_count|pluralize }}</span> -->
+                                <span class="status-text">You have voted for all position{{ election.user_vote_count|pluralize }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-actions">
+                        {% if election.is_currently_active and election.user_vote_count < election.total_positions %}
+                            <a href="{% url 'vote' election.pk %}" class="btn btn-primary">
+                                <span class="btn-icon">🗳️</span> Vote Now
+                            </a>
+                        {% else %}
+                            <button class="btn btn-disabled" disabled>
+                                {% if election.status == 'draft' %}
+                                    Coming Soon
+                                {% elif election.user_vote_count >= election.total_positions %}
+                                    Already Voted
+                                {% else %}
+                                    Voting Closed
+                                {% endif %}
+                            </button>
+                        {% endif %}
+                        
+                        <a href="{% url 'election_results' election.pk %}" class="btn btn-outline-alt">
+                            <span class="btn-icon">📊</span> Results
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">🗳️</div>
+            <h3>No Elections Available</h3>
+            <p>There are no elections at the moment. Check back soon!</p>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+/* Scoped variables for this section */
+.elections-section {
+    max-width: 1000px;
+    margin: 0 auto;
+    color: var(--text-main);
+}
+
+/* Header */
+.elections-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.elections-header h1 { margin: 0; color: var(--text-main); }
+.header-subtitle { color: var(--text-muted); }
+
+.stat-badge {
+    padding: 0.5rem 1rem;
+    background: var(--primary-light);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+/* Filter Tabs */
+.filter-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.filter-tab {
+    padding: 0.75rem 1rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: 0.3s;
+}
+
+.filter-tab.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+/* Election Card */
+.election-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: 0.3s;
+    margin-bottom: 1.5rem;
+}
+
+.election-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1);
+}
+
+/* Card Colored Borders */
+.election-card.status-active { border-left: 5px solid #10b981; }
+.election-card.status-closed { border-left: 5px solid var(--text-muted); }
+.election-card.status-draft { border-left: 5px solid #f59e0b; }
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-header h3 { margin: 0; color: var(--text-main); }
+.card-description { color: var(--text-muted); font-size: 0.95rem; margin-top: 5px; }
+
+.status-pill {
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.status-pill.status-active { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+.status-pill.status-closed { background: var(--primary-light); color: var(--text-muted); }
+
+/* Meta Info */
+.election-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+.meta-item { display: flex; gap: 10px; align-items: center; }
+.meta-label { display: block; font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+.meta-value { color: var(--text-main); font-weight: 600; }
+
+.voting-status-box {
+    margin: 0 1.5rem 1.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 8px;
+    color: #10b981;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Actions Area */
+.card-actions {
+    padding: 1.25rem 1.5rem;
+    background: var(--bg-body);
+    display: flex;
+    gap: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.2s;
+}
+
+.btn-primary { background: var(--primary); color: white; border: none; }
+.btn-warning { background: #f59e0b; color: white; border: none; }
+.btn-outline-alt { 
+    background: transparent; 
+    border: 1px solid var(--border-color); 
+    color: var(--text-main); 
+}
+.btn-outline-alt:hover { background: var(--card-bg); }
+
+.btn-disabled { background: var(--border-color); color: var(--text-muted); cursor: not-allowed; }
+
+.empty-state {
+    text-align: center;
+    padding: 4rem;
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 2px dashed var(--border-color);
+    color: var(--text-muted);
+}
+</style>
+{% endblock %}
