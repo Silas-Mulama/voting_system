@@ -137,8 +137,11 @@
     cursor: pointer;
     border: none;
     transition: 0.2s;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    min-height: 44px;
 }
 
 .btn-primary {
@@ -163,17 +166,132 @@
     color: var(--primary);
 }
 
+/* Mobile Responsive Forms - Ensure all fields are touch-friendly */
+@media (max-width: 992px) {
+    .form-section { max-width: 100%; }
+    .form-container { padding: 1.5rem; border-radius: 6px; }
+}
+
 @media (max-width: 768px) {
+    .form-section h2 { font-size: 1.5rem; margin-bottom: 1.25rem; }
     .form-container {
-        padding: 1.5rem;
+        padding: 1.25rem;
+        border-radius: 6px;
+    }
+
+    .form-group { 
+        margin-bottom: 1.25rem; 
+    }
+
+    .form-group label { 
+        margin-bottom: 0.4rem;
+        font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 0.65rem;
+        font-size: 0.95rem;
+        border-radius: 4px;
+        min-height: 40px;
+    }
+
+    .form-group textarea { 
+        min-height: 80px;
+    }
+
+    .field-error { 
+        font-size: 0.85rem;
+        margin-top: 0.3rem;
+    }
+
+    .help-text { 
+        font-size: 0.8rem;
+        margin-top: 0.3rem;
+    }
+
+    .alert {
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .form-actions {
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+
+    .form-actions .btn {
+        padding: 0.65rem 1rem;
+        font-size: 0.9rem;
+        min-height: 40px;
+    }
+}
+
+@media (max-width: 576px) {
+    .form-section { padding: 0; }
+    .form-section h2 { 
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+    }
+
+    .form-container {
+        padding: 1rem;
+        border: none;
+        border-radius: 6px;
+        box-shadow: none;
+    }
+
+    .form-group { 
+        margin-bottom: 1rem; 
+    }
+
+    .form-group label { 
+        margin-bottom: 0.35rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+        min-height: 40px;
+    }
+
+    .form-group textarea { 
+        min-height: 70px;
+    }
+
+    .field-error { 
+        font-size: 0.8rem;
+    }
+
+    .help-text { 
+        font-size: 0.75rem;
+    }
+
+    .alert {
+        padding: 0.6rem;
+        margin-bottom: 0.75rem;
+        font-size: 0.8rem;
+        border-radius: 4px;
     }
 
     .form-actions {
         flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1.25rem;
     }
 
     .form-actions .btn {
         width: 100%;
+        padding: 0.6rem;
+        font-size: 0.85rem;
+        min-height: 40px;
     }
 }
 </style>

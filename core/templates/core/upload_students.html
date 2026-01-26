@@ -130,7 +130,7 @@
 .file-info-active { display: block; }
 
 /* Buttons & Actions */
-.form-actions { margin-top: 1.5rem; display: flex; align-items: center; gap: 1.5rem; }
+.form-actions { margin-top: 1.5rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
 .btn-import {
     background: var(--primary);
     color: white;
@@ -140,11 +140,28 @@
     font-weight: 700;
     cursor: pointer;
     transition: 0.2s;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 .btn-import:hover { background: var(--primary-hover); transform: translateY(-2px); }
 .help-text { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
 
-/* Instructions Sidebar */
+.btn-text-only { 
+    background: none; 
+    border: none; 
+    color: var(--primary); 
+    font-weight: 600; 
+    cursor: pointer; 
+    padding: 0.5rem;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.2s;
+}
+.btn-text-only:hover { opacity: 0.8; }
 .instructions-card {
     background: var(--card-bg);
     border: 1px solid var(--border-color);

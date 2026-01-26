@@ -291,6 +291,10 @@
     cursor: pointer;
     border: none;
     transition: 0.2s;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn {
@@ -302,6 +306,9 @@
     border: none;
     transition: 0.2s;
     display: inline-block;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
 }
 
 .btn-primary {
@@ -349,11 +356,37 @@
     text-decoration: underline;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+    .election-detail { max-width: 100%; }
+    .detail-header { gap: 1rem; }
+    .section-header { gap: 1rem; }
+}
+
+@media (max-width: 992px) {
     .detail-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 1rem;
+    }
+
+    .detail-actions { 
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .detail-actions .btn {
+        flex: 1;
+        min-width: 120px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .section-header .btn-primary {
+        width: 100%;
     }
 
     .position-item {
@@ -363,11 +396,33 @@
 
     .position-actions {
         width: 100%;
+        flex-wrap: wrap;
     }
 
     .position-actions .btn-small {
         flex: 1;
         text-align: center;
+        min-width: 100px;
+    }
+
+    .candidates-list {
+        margin: 1rem 0 1rem 1rem;
+    }
+
+    .candidate-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .candidate-actions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .candidate-actions .btn-small {
+        flex: 1;
+        min-width: 100px;
     }
 
     .info-row {
@@ -376,8 +431,113 @@
 
     .info-row .value {
         text-align: left;
+        margin-left: 0;
         margin-top: 0.5rem;
     }
+}
+
+@media (max-width: 768px) {
+    .election-detail { max-width: 100%; padding: 0; }
+    .detail-header {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 1.5rem;
+    }
+
+    .detail-header h2 { font-size: 1.5rem; }
+
+    .detail-actions {
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    .detail-actions .btn {
+        flex: 1;
+        padding: 0.65rem 1rem;
+        font-size: 0.85rem;
+        min-height: 40px;
+    }
+
+    .info-card { padding: 1rem; border-radius: 6px; }
+    .info-card h3 { font-size: 1.1rem; }
+
+    .positions-section { padding: 1rem; }
+    .section-header h3 { font-size: 1.1rem; }
+
+    .position-item {
+        padding: 0.75rem;
+        border-radius: 6px;
+        gap: 0.75rem;
+    }
+
+    .position-info h4 { font-size: 1rem; }
+    .position-actions { gap: 0.5rem; }
+    .position-actions .btn-small {
+        padding: 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .candidates-list { margin: 0.75rem 0 0.75rem 0.75rem; padding-left: 0.75rem; }
+    .candidate-item { padding: 0.6rem; border-radius: 4px; gap: 0.5rem; }
+    .candidate-actions { gap: 0.3rem; }
+    .candidate-actions .btn-small { padding: 0.4rem 0.6rem; font-size: 0.75rem; min-width: 80px; }
+}
+
+@media (max-width: 576px) {
+    .detail-header h2 { font-size: 1.25rem; }
+    .detail-actions { gap: 0.5rem; }
+    .detail-actions .btn {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.8rem;
+        min-height: 40px;
+    }
+
+    .info-card { padding: 0.75rem; }
+    .info-card h3 { font-size: 1rem; margin-bottom: 0.75rem; }
+
+    .info-row {
+        padding: 0.5rem 0;
+        font-size: 0.85rem;
+    }
+
+    .info-row .label { font-weight: 600; }
+    .info-row .value { font-size: 0.85rem; margin-top: 0.25rem; }
+
+    .positions-section { padding: 0.75rem; }
+    .section-header { padding-bottom: 0.75rem; margin-bottom: 1rem; }
+    .section-header h3 { font-size: 1rem; }
+    .section-header .btn-primary { width: 100%; font-size: 0.8rem; padding: 0.6rem; }
+
+    .position-item {
+        padding: 0.5rem;
+        gap: 0.5rem;
+    }
+
+    .position-info h4 { font-size: 0.95rem; margin-bottom: 0.25rem; }
+    .position-info p { font-size: 0.75rem; }
+    .candidates-count { font-size: 0.75rem; }
+
+    .position-actions { gap: 0.25rem; flex-wrap: wrap; }
+    .position-actions .btn-small {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.7rem;
+        flex: 1;
+        min-width: 70px;
+    }
+
+    .candidates-list { margin: 0.5rem 0 0.5rem 0.5rem; padding-left: 0.5rem; }
+    .candidate-item { padding: 0.5rem; gap: 0.3rem; margin-bottom: 0.3rem; }
+    .candidate-info p { font-size: 0.8rem; margin: 0.15rem 0; }
+    .approval-status { font-size: 0.75rem; }
+    .candidate-actions { gap: 0.25rem; }
+    .candidate-actions .btn-small {
+        padding: 0.35rem 0.5rem;
+        font-size: 0.65rem;
+        flex: 1;
+        min-width: 60px;
+    }
+
+    .empty-message { font-size: 0.85rem; padding: 0.75rem; }
 }
 </style>
 {% endblock %}
