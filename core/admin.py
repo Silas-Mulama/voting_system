@@ -7,7 +7,11 @@ from .models import User, Election, Position, Candidate, Vote, AuditLog, SystemS
 class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
+<<<<<<< HEAD
         ('Personal info', {'fields': ('full_name', 'admission_number', 'programme', 'year_of_study')}),
+=======
+        ('Personal info', {'fields': ('full_name', 'admission_number', 'class_form')}),
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         ('Permissions', {'fields': ('is_student', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
         ('Password', {'fields': ('password_changed',)}),
@@ -86,9 +90,15 @@ class VoteAdmin(admin.ModelAdmin):
         """Prevent manual vote creation from admin"""
         return False
     
+<<<<<<< HEAD
     # def has_delete_permission(self, request, obj=None):
     #     """Prevent vote deletion from admin"""
     #     return False
+=======
+    def has_delete_permission(self, request, obj=None):
+        """Prevent vote deletion from admin"""
+        return False
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
 
 @admin.register(AuditLog)

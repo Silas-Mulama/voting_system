@@ -62,8 +62,12 @@ class SystemAccessLockMiddlewareTests(TestCase):
             email='student@test.com',
             admission_number='TEST/00001/24S',
             full_name='Test Student',
+<<<<<<< HEAD
             programme='DICT',
             year_of_study=1,
+=======
+            class_form='1A',
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
             is_student=True,
             password='testpass123'
         )
@@ -197,13 +201,21 @@ class ElectionsListVotingTests(TestCase):
 
         self.client = Client()
         User = get_user_model()
+<<<<<<< HEAD
+=======
+
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         # Create student user
         self.student = User.objects.create_user(
             email='voter@test.com',
             admission_number='VOTE/00001/24S',
             full_name='Voter One',
+<<<<<<< HEAD
             programme='DICT',
             year_of_study=2,
+=======
+            class_form='1A',
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
             is_student=True,
             password='votepass123'
         )

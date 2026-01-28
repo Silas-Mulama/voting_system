@@ -98,9 +98,15 @@ class StudentBulkUploadValidator:
     def _validate_rows(self, rows, is_excel=False):
         """Validate each row and collect errors."""
         if not rows:
+<<<<<<< HEAD
             raise ValidationError("File is empty or has no data rows. Please ensure your file contains student records with the following columns: admission_number, full_name, email, programme, year_of_study")
         
         required_fields = {'admission_number', 'full_name', 'email', 'programme', 'year_of_study'}
+=======
+            raise ValidationError("File is empty or has no data rows. Please ensure your file contains student records with the following columns: admission_number, full_name, class_form, email")
+        
+        required_fields = {'admission_number', 'full_name', 'class_form', 'email'}
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         
         # Check headers - for CSV, first row IS data (headers handled by DictReader), for Excel get from first tuple element
         if is_excel:
@@ -150,21 +156,33 @@ class StudentBulkUploadValidator:
         
         admission = str(row.get('admission_number', '')).strip()
         full_name = str(row.get('full_name', '')).strip()
+<<<<<<< HEAD
         email = str(row.get('email', '')).strip()
         programme = str(row.get('programme', '')).strip()
         year_of_study_str = str(row.get('year_of_study', '')).strip()
+=======
+        class_form = str(row.get('class_form', '')).strip()
+        email = str(row.get('email', '')).strip()
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         
         # Check missing values
         if not admission:
             errors.append(f"Row {row_num}: Missing admission number")
         if not full_name:
             errors.append(f"Row {row_num}: Missing full name")
+<<<<<<< HEAD
         if not email:
             errors.append(f"Row {row_num}: Missing email address")
         if not programme:
             errors.append(f"Row {row_num}: Missing programme")
         if not year_of_study_str:
             errors.append(f"Row {row_num}: Missing year of study")
+=======
+        if not class_form:
+            errors.append(f"Row {row_num}: Missing class form")
+        if not email:
+            errors.append(f"Row {row_num}: Missing email address")
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         
         if errors:
             return errors
@@ -177,6 +195,7 @@ class StudentBulkUploadValidator:
         if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
             errors.append(f"Row {row_num}: Invalid email format '{email}'")
         
+<<<<<<< HEAD
         # Validate year of study is a positive integer
         try:
             year_of_study = int(year_of_study_str)
@@ -185,6 +204,8 @@ class StudentBulkUploadValidator:
         except ValueError:
             errors.append(f"Row {row_num}: Year of study must be a valid number, got '{year_of_study_str}'")
         
+=======
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         # Check for duplicates within file
         if admission in admission_numbers and admission != '':
             errors.append(f"Row {row_num}: Duplicate admission number '{admission}'")
@@ -209,6 +230,7 @@ def generate_temporary_password():
     chars = string.ascii_letters + string.digits + '!@#$%^&*'
     return ''.join(secrets.choice(chars) for _ in range(12))
 
+<<<<<<< HEAD
 def bulk_create_students(rows, progress_callback=None):
     """Create students from validated rows with optional progress callback."""
     created = []
@@ -222,15 +244,34 @@ def bulk_create_students(rows, progress_callback=None):
             email = str(row.get('email')).strip()
             programme = str(row.get('programme')).strip()
             year_of_study = int(str(row.get('year_of_study')).strip())
+=======
+
+def bulk_create_students(rows):
+    """Create students from validated rows."""
+    created = []
+    errors = []
+    
+    for row in rows:
+        try:
+            admission_number = str(row.get('admission_number')).strip()
+            full_name = str(row.get('full_name')).strip()
+            class_form = str(row.get('class_form')).strip()
+            email = str(row.get('email')).strip()
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
             
             temp_password = generate_temporary_password()
             
             user = User.objects.create_user(
                 admission_number=admission_number,
                 full_name=full_name,
+<<<<<<< HEAD
                 email=email,
                 programme=programme,
                 year_of_study=year_of_study,
+=======
+                class_form=class_form,
+                email=email,
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                 is_student=True,
                 password=temp_password
             )
@@ -240,6 +281,7 @@ def bulk_create_students(rows, progress_callback=None):
                 'admission_number': admission_number,
                 'email': email,
                 'full_name': full_name,
+<<<<<<< HEAD
                 'programme': programme,
                 'year_of_study': year_of_study,
                 'temp_password': temp_password
@@ -256,6 +298,12 @@ def bulk_create_students(rows, progress_callback=None):
             if progress_callback and callable(progress_callback):
                 progress = int((index + 1) / total * 100)
                 progress_callback(progress, index + 1, total)
+=======
+                'temp_password': temp_password
+            })
+        except Exception as e:
+            errors.append(f"Error creating student {row.get('admission_number')}: {str(e)}")
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
     
     return created, errors
 

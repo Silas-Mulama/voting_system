@@ -11,7 +11,11 @@ ADMISSION_NUMBER_REGEX = r'^[A-Z]+/\d{5}/\d{2}[A-Z]$'  # e.g. DICT/01542/24S
 class UserManager(BaseUserManager):
 	use_in_migrations = True
 
+<<<<<<< HEAD
 	def _create_user(self, email, admission_number, full_name, programme, year_of_study, is_student, password=None, **extra_fields):
+=======
+	def _create_user(self, email, admission_number, full_name, class_form, is_student, password=None, **extra_fields):
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 		if is_student:
 			if not admission_number:
 				raise ValueError('Students must have an admission number')
@@ -27,8 +31,12 @@ class UserManager(BaseUserManager):
 			email=email,
 			admission_number=admission_number,
 			full_name=full_name,
+<<<<<<< HEAD
 			programme=programme,
 			year_of_study=year_of_study,
+=======
+			class_form=class_form,
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 			is_student=is_student,
 			**extra_fields
 		)
@@ -36,11 +44,19 @@ class UserManager(BaseUserManager):
 		user.save(using=self._db)
 		return user
 
+<<<<<<< HEAD
 	def create_user(self, email=None, admission_number=None, full_name=None, programme=None, year_of_study=None, password=None, **extra_fields):
 		is_student = extra_fields.pop('is_student', False)
 		extra_fields.setdefault('is_staff', False)
 		extra_fields.setdefault('is_superuser', False)
 		return self._create_user(email, admission_number, full_name, programme, year_of_study, is_student, password, **extra_fields)
+=======
+	def create_user(self, email=None, admission_number=None, full_name=None, class_form=None, password=None, **extra_fields):
+		is_student = extra_fields.pop('is_student', False)
+		extra_fields.setdefault('is_staff', False)
+		extra_fields.setdefault('is_superuser', False)
+		return self._create_user(email, admission_number, full_name, class_form, is_student, password, **extra_fields)
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
 	def create_superuser(self, email, full_name, password=None, **extra_fields):
 		extra_fields.setdefault('is_staff', True)
@@ -49,7 +65,11 @@ class UserManager(BaseUserManager):
 			raise ValueError('Superuser must have is_staff=True.')
 		if extra_fields.get('is_superuser') is not True:
 			raise ValueError('Superuser must have is_superuser=True.')
+<<<<<<< HEAD
 		return self._create_user(email, None, full_name, None, None, False, password, **extra_fields)
+=======
+		return self._create_user(email, None, full_name, None, False, password, **extra_fields)
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
 
 class User(AbstractUser):
@@ -69,8 +89,12 @@ class User(AbstractUser):
 		]
 	)
 	full_name = models.CharField(max_length=255)
+<<<<<<< HEAD
 	programme = models.CharField(max_length=100, null=True, blank=True)
 	year_of_study = models.PositiveIntegerField(null=True, blank=True)
+=======
+	class_form = models.CharField(max_length=50, null=True, blank=True)
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 	is_student = models.BooleanField(default=False)
 	password_changed = models.BooleanField(default=False)  # Track first login password change
 	profile_picture = models.ImageField(upload_to='profile_pictures/%Y/%m/%d/', null=True, blank=True)

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+<<<<<<< HEAD
 
+=======
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,11 +27,15 @@
             --info-bg: #0f172a;
         }
 
+<<<<<<< HEAD
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+=======
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -67,6 +74,7 @@
         }
 
         @keyframes float {
+<<<<<<< HEAD
 
             0%,
             100% {
@@ -92,6 +100,16 @@
         .suspension-body {
             padding: 40px;
         }
+=======
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .suspension-header h1 { font-size: 2rem; margin-bottom: 10px; font-weight: 800; }
+        .suspension-header p { font-size: 1rem; opacity: 0.9; }
+
+        .suspension-body { padding: 40px; }
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
         .status-badge {
             display: inline-flex;
@@ -107,11 +125,15 @@
             margin-bottom: 25px;
         }
 
+<<<<<<< HEAD
         .message-text {
             color: var(--text-muted);
             line-height: 1.7;
             margin-bottom: 25px;
         }
+=======
+        .message-text { color: var(--text-muted); line-height: 1.7; margin-bottom: 25px; }
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
         .info-grid {
             display: grid;
@@ -127,6 +149,7 @@
             text-align: center;
         }
 
+<<<<<<< HEAD
         .info-item i {
             color: var(--primary);
             font-size: 1.2rem;
@@ -139,6 +162,10 @@
             color: var(--text-main);
             font-weight: 600;
         }
+=======
+        .info-item i { color: var(--primary); font-size: 1.2rem; margin-bottom: 8px; display: block; }
+        .info-item span { font-size: 0.8rem; color: var(--text-main); font-weight: 600; }
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
         .logout-button {
             display: block;
@@ -153,16 +180,21 @@
             transition: 0.3s;
         }
 
+<<<<<<< HEAD
         .logout-button:hover {
             transform: translateY(-2px);
             opacity: 0.9;
         }
+=======
+        .logout-button:hover { transform: translateY(-2px); opacity: 0.9; }
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
         .footer-text {
             text-align: center;
             padding: 20px;
             font-size: 0.8rem;
             color: var(--text-muted);
+<<<<<<< HEAD
             border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
 
@@ -329,6 +361,12 @@
     </style>
 </head>
 
+=======
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 <body>
     <div class="suspension-container">
         <div class="suspension-header">
@@ -343,7 +381,11 @@
             </div>
 
             <p class="message-text">
+<<<<<<< HEAD
                 The voting system is currently undergoing a scheduled security audit.
+=======
+                The voting system is currently undergoing a scheduled security audit. 
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                 We anticipate being back online within the hour.
             </p>
 
@@ -359,16 +401,24 @@
             </div>
 
             {% if suspension_reason %}
+<<<<<<< HEAD
             <div
                 style="background: rgba(99, 102, 241, 0.1); border-left: 4px solid var(--primary); padding: 15px; border-radius: 8px; margin-bottom: 25px; font-size: 0.9rem; color: var(--text-main);">
+=======
+            <div style="background: rgba(99, 102, 241, 0.1); border-left: 4px solid var(--primary); padding: 15px; border-radius: 8px; margin-bottom: 25px; font-size: 0.9rem; color: var(--text-main);">
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                 <strong>Admin Note:</strong> {{ suspension_reason }}
             </div>
             {% endif %}
 
+<<<<<<< HEAD
             <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
                 <button type="submit" class="logout-button">Return to Portal</button>
             </form>
+=======
+            <a href="{% url 'logout' %}" class="logout-button">Return to Portal</a>
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         </div>
 
         <div class="footer-text">
@@ -387,5 +437,8 @@
         }, 300000); 
     </script>
 </body>
+<<<<<<< HEAD
 
+=======
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 </html>

@@ -1,15 +1,25 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+<<<<<<< HEAD
 
+=======
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Student Portal | eVoting{% endblock %}</title>
+<<<<<<< HEAD
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+=======
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
     <style>
         :root {
             /* Light Theme */
@@ -37,9 +47,13 @@
             --primary-light: rgba(79, 70, 229, 0.2);
         }
 
+<<<<<<< HEAD
         * {
             box-sizing: border-box;
         }
+=======
+        * { box-sizing: border-box; }
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
         body {
             margin: 0;
@@ -113,8 +127,12 @@
             transition: 0.2s;
         }
 
+<<<<<<< HEAD
         .nav-link:hover,
         .nav-link.active {
+=======
+        .nav-link:hover, .nav-link.active {
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
             color: var(--primary);
             background: var(--primary-light);
         }
@@ -136,6 +154,7 @@
             text-align: right;
         }
 
+<<<<<<< HEAD
         .user-name {
             font-weight: 600;
             font-size: 0.85rem;
@@ -146,12 +165,20 @@
             font-size: 0.7rem;
             color: var(--text-muted);
         }
+=======
+        .user-name { font-weight: 600; font-size: 0.85rem; color: var(--text-main); }
+        .user-id { font-size: 0.7rem; color: var(--text-muted); }
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
         .theme-toggle-btn {
             background: var(--primary-light);
             border: none;
             color: var(--primary);
+<<<<<<< HEAD
             width: 36px;
+=======
+            width: 36px; 
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
             height: 36px;
             min-width: 44px;
             min-height: 44px;
@@ -220,6 +247,7 @@
             text-align: right;
         }
 
+<<<<<<< HEAD
         .profile-name {
             font-weight: 600;
             font-size: 0.8rem;
@@ -228,6 +256,16 @@
 
         .profile-admission {
             font-size: 0.65rem;
+=======
+        .profile-name { 
+            font-weight: 600; 
+            font-size: 0.8rem; 
+            color: var(--text-main);
+        }
+
+        .profile-admission { 
+            font-size: 0.65rem; 
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
             color: var(--text-muted);
         }
 
@@ -245,7 +283,11 @@
             background: var(--white);
             border: 1px solid var(--border-color);
             border-radius: 10px;
+<<<<<<< HEAD
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+=======
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
             display: none;
             padding: 0.5rem;
             z-index: 1100;
@@ -262,6 +304,7 @@
             pointer-events: auto;
         }
 
+<<<<<<< HEAD
         .student-profile-dropdown.active .profile-dropdown-menu {
             display: block;
             opacity: 1;
@@ -269,6 +312,8 @@
             pointer-events: auto;
         }
 
+=======
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         .dropdown-link {
             display: flex;
             align-items: center;
@@ -293,11 +338,19 @@
             margin: 0.5rem 0;
         }
 
+<<<<<<< HEAD
         .logout-link {
             color: #ef4444;
         }
 
         .logout-link:hover {
+=======
+        .logout-link { 
+            color: #ef4444;
+        }
+
+        .logout-link:hover { 
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
             background: #fef2f2;
             color: #dc2626;
         }
@@ -315,6 +368,10 @@
             padding: 0.5rem;
             min-height: 44px;
             min-width: 44px;
+<<<<<<< HEAD
+=======
+            display: flex;
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
             align-items: center;
             justify-content: center;
         }
@@ -334,7 +391,10 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             min-height: 70vh;
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         /* --- Footer Styling --- */
         .portal-footer {
             background: var(--white);
@@ -395,8 +455,12 @@
             transform: translateY(-3px);
         }
 
+<<<<<<< HEAD
         .footer-links h4,
         .footer-contact h4 {
+=======
+        .footer-links h4, .footer-contact h4 {
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
             color: var(--text-main);
             font-size: 1.1rem;
             font-weight: 700;
@@ -409,9 +473,13 @@
             margin: 0;
         }
 
+<<<<<<< HEAD
         .footer-links ul li {
             margin-bottom: 0.75rem;
         }
+=======
+        .footer-links ul li { margin-bottom: 0.75rem; }
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
         .footer-links ul li a {
             color: var(--text-muted);
@@ -454,16 +522,21 @@
                 grid-template-columns: 1fr 1fr;
                 gap: 2rem;
             }
+<<<<<<< HEAD
 
             .footer-brand {
                 grid-column: span 2;
             }
+=======
+            .footer-brand { grid-column: span 2; }
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         }
 
         @media (max-width: 576px) {
             .footer-grid {
                 grid-template-columns: 1fr;
             }
+<<<<<<< HEAD
 
             .footer-brand {
                 grid-column: span 1;
@@ -472,13 +545,21 @@
             .portal-footer {
                 padding: 3rem 0 1.5rem;
             }
+=======
+            .footer-brand { grid-column: span 1; }
+            .portal-footer { padding: 3rem 0 1.5rem; }
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         }
 
         /* --- RESPONSIVE LOGIC --- */
         @media (max-width: 992px) {
+<<<<<<< HEAD
             .mobile-toggle {
                 display: block;
             }
+=======
+            .mobile-toggle { display: block; }
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
             .navbar-container {
                 justify-content: flex-start;
@@ -490,8 +571,12 @@
             }
 
             .navbar-menu-content {
+<<<<<<< HEAD
                 display: none;
                 /* Hidden by default */
+=======
+                display: none; /* Hidden by default */
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                 position: absolute;
                 top: var(--nav-height);
                 left: 0;
@@ -502,12 +587,19 @@
                 padding: 1.5rem;
                 gap: 1.5rem;
                 align-items: flex-start;
+<<<<<<< HEAD
                 box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
             }
 
             .navbar-menu-content.show {
                 display: flex;
             }
+=======
+                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            }
+
+            .navbar-menu-content.show { display: flex; }
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
             .navbar-nav {
                 flex-direction: column;
@@ -524,6 +616,7 @@
                 justify-content: space-between;
             }
 
+<<<<<<< HEAD
             .user-meta {
                 text-align: left;
             }
@@ -552,6 +645,19 @@
     </style>
 </head>
 
+=======
+            .user-meta { text-align: left; }
+        }
+
+        @media (max-width: 576px) {
+            .main-card { padding: 1.25rem; border-radius: 0; border: none; }
+            .portal-container { margin: 0; padding: 0; }
+            .navbar-container { padding: 0 1rem; }
+            .brand-text { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 <body>
 
     <nav class="navbar-student">
@@ -566,6 +672,7 @@
 
             <div class="navbar-menu-content" id="nav-menu">
                 <ul class="navbar-nav">
+<<<<<<< HEAD
                     <li><a href="{% url 'student_dashboard' %}"
                             class="nav-link {% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}">Home</a>
                     </li>
@@ -577,23 +684,40 @@
                     <li class="nav-item">
                         <a href="{% url 'about' %}"
                             class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+=======
+                    <li><a href="{% url 'student_dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}">Home</a></li>
+                    <li><a href="{% url 'elections_list' %}" class="nav-link  {% if request.resolver_match.url_name == 'elections_list' %}active{% endif %}">Vote</a></li>
+                    <!-- <li><a href="{% url 'elections_list' %}" class="nav-link {% if request.resolver_match.url_name == 'elections_list' %}active{% endif %}">📊 Results</a></li> -->
+                    
+                    <li class="nav-item">
+                        <a href="{% url 'about' %}" class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                             <span class="nav-icon"></span>
                             About
                         </a>
                     </li>
+<<<<<<< HEAD
 
+=======
+                 
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                 </ul>
 
                 <div class="navbar-actions">
                     <button id="theme-toggle" class="theme-toggle-btn">
                         <i class="fas fa-moon"></i>
                     </button>
+<<<<<<< HEAD
 
+=======
+                    
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                     <!-- Profile Dropdown -->
                     <div class="student-profile-dropdown">
                         <div class="profile-trigger">
                             <div class="profile-avatar">
                                 {% if user.profile_picture %}
+<<<<<<< HEAD
                                 <img src="{{ user.profile_picture.url }}" alt="Profile picture" class="avatar-image">
                                 {% else %}
                                 {% if user.full_name %}
@@ -601,6 +725,15 @@
                                 {% else %}
                                 {{ user.username|first|upper }}
                                 {% endif %}
+=======
+                                    <img src="{{ user.profile_picture.url }}" alt="Profile picture" class="avatar-image">
+                                {% else %}
+                                    {% if user.full_name %}
+                                        {{ user.full_name|first|upper }}
+                                    {% else %}
+                                        {{ user.username|first|upper }}
+                                    {% endif %}
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                                 {% endif %}
                             </div>
                             <div class="profile-info">
@@ -609,7 +742,11 @@
                             </div>
                             <i class="fas fa-chevron-down"></i>
                         </div>
+<<<<<<< HEAD
 
+=======
+                        
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                         <div class="profile-dropdown-menu">
                             <a href="{% url 'student_profile' %}" class="dropdown-link">
                                 <i class="fas fa-user-circle"></i> My Profile
@@ -621,6 +758,7 @@
                                 <i class="fas fa-lock"></i> Change Password
                             </a>
                             <div class="dropdown-divider"></div>
+<<<<<<< HEAD
                             <form method="post" action="{% url 'logout' %}" style="display: inline; width: 100%;">
                                 {% csrf_token %}
                                 <button type="submit" class="dropdown-link logout-link"
@@ -628,6 +766,11 @@
                                     <i class="fas fa-sign-out-alt"></i> Logout
                                 </button>
                             </form>
+=======
+                            <a href="{% url 'logout' %}" class="dropdown-link logout-link">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                         </div>
                     </div>
                 </div>
@@ -646,8 +789,12 @@
             <div class="footer-grid">
                 <div class="footer-brand">
                     <span class="brand-text">eVoting</span>
+<<<<<<< HEAD
                     <p class="footer-motto">Secure, Transparent, and Fair student elections for Butere Technical
                         Training Institute.</p>
+=======
+                    <p class="footer-motto">Secure, Transparent, and Fair student elections for Butere Technical Training Institute.</p>
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                     <div class="social-links">
                         <a href="#"><i class="fab fa-facebook"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
@@ -716,6 +863,7 @@
                 menuBtn.querySelector('i').className = 'fas fa-bars';
             }
         });
+<<<<<<< HEAD
 
         // 3. Profile Dropdown Toggle
         const profileDropdown = document.querySelector('.student-profile-dropdown');
@@ -754,4 +902,10 @@
     {% block extra_js %}{% endblock %}
 </body>
 
+=======
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 </html>

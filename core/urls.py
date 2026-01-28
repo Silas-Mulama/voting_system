@@ -1,5 +1,8 @@
 from django.urls import path
+<<<<<<< HEAD
 from django.contrib.auth import views as auth_views
+=======
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 from . import views
 
 urlpatterns = [
@@ -11,7 +14,11 @@ urlpatterns = [
     path('login/student/', views.student_login, name='student_login'),
     path('change-password/', views.change_password_first, name='change_password_first'),
     path('student/change-password/', views.change_password, name='change_password'),
+<<<<<<< HEAD
     path('logout/', auth_views.LogoutView.as_view(next_page='student_login'), name='logout'),
+=======
+    path('logout/', views.logout_view, name='logout'),
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
     
     # Dashboards
     path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
@@ -19,7 +26,10 @@ urlpatterns = [
     
     # Student Upload
     path('admin/students/upload/', views.upload_students, name='upload_students'),
+<<<<<<< HEAD
     path('admin/students/upload/progress/', views.get_upload_progress, name='get_upload_progress'),
+=======
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
     path('admin/students/credentials/', views.student_credentials, name='student_credentials'),
     path('admin/students/credentials/download/', views.download_student_credentials, name='download_student_credentials'),
     

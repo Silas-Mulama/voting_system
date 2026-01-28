@@ -11,6 +11,7 @@ User = get_user_model()
 
 # Create test students
 students_data = [
+<<<<<<< HEAD
     ('DICT/00001/24S', 'Alice Johnson', 'DICT', 1),
     ('DICT/00002/24S', 'Bob Smith', 'DICT', 1),
     ('BIT/00003/24S', 'Carol White', 'BIT', 2),
@@ -27,11 +28,32 @@ for admission, name, programme, year in students_data:
             full_name=name,
             programme=programme,
             year_of_study=year,
+=======
+    ('CS/00001/24A', 'Alice Johnson', 'Form 4A'),
+    ('CS/00002/24A', 'Bob Smith', 'Form 4A'),
+    ('CS/00003/24B', 'Carol White', 'Form 4B'),
+    ('CS/00004/24B', 'David Brown', 'Form 4B'),
+    ('CS/00005/24C', 'Eve Davis', 'Form 4C'),
+]
+
+for admission, name, form in students_data:
+    if not User.objects.filter(admission_number=admission).exists():
+        email_part = admission.lower().replace('/', '_')
+        user = User.objects.create_user(
+            email=email_part + '@student.local',
+            admission_number=admission,
+            full_name=name,
+            class_form=form,
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
             password='Temp@12345',
             password_changed=True,
             is_student=True
         )
+<<<<<<< HEAD
         print(f'Created student: {name} ({admission}) - {programme}, Year {year}')
+=======
+        print(f'Created student: {name} ({admission})')
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
 print('\nStudent accounts created!')
 

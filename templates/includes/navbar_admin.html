@@ -4,12 +4,20 @@
             <button class="mobile-nav-toggle" onclick="toggleSidebar()" title="Toggle Menu">
                 <i class="fas fa-bars"></i>
             </button>
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
             <a href="{% url 'admin_dashboard' %}" class="brand-link">
                 <span class="brand-text">eVoting <span class="admin-tag">Admin</span></span>
             </a>
         </div>
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         <div class="navbar-right">
             <button onclick="toggleTheme()" class="theme-toggle-admin" title="Toggle Dark/Light Mode">
                 <i class="fas fa-adjust"></i>
@@ -23,6 +31,7 @@
                     </div>
                     <div class="user-avatar">
                         {% if user.profile_picture %}
+<<<<<<< HEAD
                         <img src="{{ user.profile_picture.url }}" alt="Profile picture" class="avatar-image">
                         {% else %}
                         {% if user.username %}
@@ -36,6 +45,21 @@
                     </div>
                 </div>
 
+=======
+                            <img src="{{ user.profile_picture.url }}" alt="Profile picture" class="avatar-image">
+                        {% else %}
+                            {% if user.username %}
+                                {{ user.username|first|upper }}
+                            {% elif user.full_name %}
+                                {{ user.full_name|first|upper }}
+                            {% else %}
+                                A
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                 <div class="dropdown-menu">
                     <a href="{% url 'admin_profile' %}" class="dropdown-item">
                         <i class="fas fa-user-circle"></i> My Profile
@@ -54,6 +78,7 @@
                         <i class="fas fa-history"></i> Activity Log
                     </a>
                     <div class="dropdown-divider"></div>
+<<<<<<< HEAD
                     <form method="post" action="{% url 'logout' %}" style="display: inline;">
                         {% csrf_token %}
                         <button type="submit" class="dropdown-item logout-text"
@@ -61,6 +86,11 @@
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </button>
                     </form>
+=======
+                    <a href="{% url 'logout' %}" class="dropdown-item logout-text">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                 </div>
             </div>
         </div>
@@ -76,7 +106,11 @@
         top: 0;
         width: 100%;
         z-index: 1001;
+<<<<<<< HEAD
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+=======
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
     }
 
     .navbar-container {
@@ -88,25 +122,36 @@
         justify-content: space-between;
     }
 
+<<<<<<< HEAD
     .navbar-left,
     .navbar-right {
+=======
+    .navbar-left, .navbar-right {
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         display: flex;
         align-items: center;
         gap: 1rem;
     }
 
     /* Brand Logo */
+<<<<<<< HEAD
     .brand-link {
         text-decoration: none;
     }
 
+=======
+    .brand-link { text-decoration: none; }
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
     .brand-text {
         font-size: 1.25rem;
         font-weight: 800;
         color: var(--text-main);
         letter-spacing: -0.5px;
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
     .admin-tag {
         color: var(--primary);
         font-size: 0.8rem;
@@ -139,7 +184,10 @@
         cursor: pointer;
         transition: 0.2s;
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
     .theme-toggle-admin:hover {
         border-color: var(--primary);
         color: var(--primary);
@@ -166,6 +214,7 @@
         text-align: right;
     }
 
+<<<<<<< HEAD
     .user-name {
         font-size: 0.85rem;
         font-weight: 700;
@@ -176,6 +225,10 @@
         font-size: 0.7rem;
         color: var(--text-muted);
     }
+=======
+    .user-name { font-size: 0.85rem; font-weight: 700; color: var(--text-main); }
+    .user-role { font-size: 0.7rem; color: var(--text-muted); }
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
     .user-avatar {
         width: 35px;
@@ -206,7 +259,11 @@
         background: var(--white);
         border: 1px solid var(--border-color);
         border-radius: 12px;
+<<<<<<< HEAD
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+=======
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         display: none;
         padding: 0.5rem;
         z-index: 1100;
@@ -223,6 +280,7 @@
         pointer-events: auto;
     }
 
+<<<<<<< HEAD
     .navbar-user-dropdown.active .dropdown-menu {
         display: block;
         opacity: 1;
@@ -230,6 +288,8 @@
         pointer-events: auto;
     }
 
+=======
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
     .dropdown-item {
         display: flex;
         align-items: center;
@@ -254,6 +314,7 @@
         margin: 0.5rem 0;
     }
 
+<<<<<<< HEAD
     .logout-text {
         color: #ef4444;
     }
@@ -339,3 +400,23 @@
         });
     }
 </script>
+=======
+    .logout-text { color: #ef4444; }
+    .logout-text:hover { background: #fef2f2; color: #dc2626; }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+        .mobile-nav-toggle { display: block; }
+        .user-info { display: none; }
+        .navbar-container { padding: 0 1rem; }
+    }
+
+    @media (max-width: 576px) {
+        .brand-text { font-size: 1rem; }
+        .admin-tag { display: none; }
+        .navbar-container { padding: 0 0.75rem; }
+        .navbar-right { gap: 0.5rem; }
+        .user-avatar { width: 32px; height: 32px; font-size: 0.8rem; }
+    }
+</style>
+>>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
