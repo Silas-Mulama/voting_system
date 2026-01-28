@@ -1,0 +1,873 @@
+{% extends 'base_admin.html' %}
+{% load custom_filters %}
+
+{% block title %}Election Results - eVoting System{% endblock %}
+
+{% block content %}
+<div class="results-container">
+    <header class="section-header">
+        <div class="header-left">
+            <h2>Election Insights</h2>
+            <p class="text-muted">Analyze voter turnout and candidate performance in real-time.</p>
+        </div>
+        <div class="header-right">
+            <form method="get" class="selector-form">
+                <div class="select-wrapper">
+                    <i class="fas fa-filter"></i>
+                    <select name="election_id" onchange="this.form.submit();" class="custom-select">
+                        <option value="">-- Switch Election --</option>
+                        {% for election in elections %}
+                        <option value="{{ election.id }}" {% if selected_election.id == election.id %}selected{% endif %}>
+                            {{ election.title }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+        </div>
+    </header>
+
+    {% if selected_election %}
+    <div class="election-summary-card">
+        <div class="summary-main">
+            <span class="status-pill status-{{ selected_election.status }}">
+                <i class="fas fa-circle"></i> {{ selected_election.get_status_display }}
+            </span>
+            <h1>{{ selected_election.title }}</h1>
+            <p>{{ selected_election.description }}</p>
+        </div>
+        <div class="summary-details">
+            <div class="detail-pill"><i class="far fa-clock"></i> {{ selected_election.end_datetime|timeuntil }}
+                remaining</div>
+            <div class="detail-pill"><i class="fas fa-users"></i> {{ turnout_stats.total_students }} Eligible</div>
+        </div>
+    </div>
+
+    <div class="analytics-grid">
+        <div class="analytic-card">
+            <div class="analytic-icon icon-blue"><i class="fas fa-vote-yea"></i></div>
+            <div class="analytic-info">
+                <span class="analytic-label">Votes Cast</span>
+                <h2 class="analytic-value">{{ turnout_stats.total_votes }}</h2>
+            </div>
+        </div>
+        <div class="analytic-card">
+            <div class="analytic-icon icon-green"><i class="fas fa-chart-line"></i></div>
+            <div class="analytic-info">
+                <span class="analytic-label">Turnout Rate</span>
+                <h2 class="analytic-value">{{ turnout_stats.turnout_percentage }}%</h2>
+            </div>
+        </div>
+        <div class="analytic-card">
+            <div class="analytic-icon icon-purple"><i class="fas fa-sitemap"></i></div>
+            <div class="analytic-info">
+                <span class="analytic-label">Positions</span>
+                <h2 class="analytic-value">{{ selected_election.positions.count }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <section class="results-section">
+        <div class="section-title">
+            <h3><i class="fas fa-poll"></i> Live Standings</h3>
+            <div class="title-actions">
+                <button onclick="window.print();" class="btn-icon-text"><i class="fas fa-print"></i> Print
+                    Report</button>
+                <a href="{% url 'election_results_export_csv' selected_election.id %}" class="btn-icon-text"><i
+                        class="fas fa-file-csv"></i> Export CSV</a>
+            </div>
+        </div>
+
+        <div class="positions-grid">
+            {% for position, candidates in results.items %}
+            <div class="position-results-card">
+                <div class="pos-card-header">
+                    <h4>{{ position }}</h4>
+                    <span class="total-v-badge">{{ total_votes_per_position|get_item:position }} Votes</span>
+                </div>
+
+                <div class="candidate-list">
+                    {% for candidate in candidates %}
+                    <div class="candidate-row {% if candidate.is_winner %}winner-row{% endif %}">
+                        <div class="cand-info">
+                            <span class="cand-name">
+                                {{ candidate.full_name }}
+                                {% if candidate.is_winner %}<i class="fas fa-crown winner-icon"></i>{% endif %}
+                            </span>
+                            <span class="cand-votes">{{ candidate.vote_count }}</span>
+                        </div>
+                        <div class="cand-progress-bg">
+                            <div class="cand-progress-fill" style="width: {{ candidate.percentage }}%">
+                                <span class="cand-perc">{{ candidate.percentage }}%</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">No positions configured for this election.</div>
+            {% endfor %}
+        </div>
+    </section>
+
+    {% else %}
+    <div class="no-selection-state">
+        <div class="empty-icon"><i class="fas fa-chart-bar"></i></div>
+        <h3>No Election Selected</h3>
+        <p>Please select an election from the menu above to view its results and analytics.</p>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    /* Layout & Headers */
+    .results-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    /* Selector Styling */
+    .selector-form {
+        flex: 1;
+        max-width: 300px;
+    }
+
+    .select-wrapper {
+        position: relative;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .select-wrapper:hover {
+        border-color: var(--primary);
+        box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+    }
+
+    .select-wrapper i {
+        color: var(--primary);
+        font-size: 1rem;
+        pointer-events: none;
+    }
+
+    .custom-select {
+        border: none;
+        background: transparent;
+        padding: 0.7rem 0.5rem;
+        color: var(--text-main);
+        font-weight: 600;
+        outline: none;
+        min-width: 180px;
+        font-size: 0.95rem;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .custom-select:focus {
+        outline: none;
+    }
+
+    .custom-select option {
+        background: var(--card-bg);
+        color: var(--text-main);
+        padding: 0.5rem;
+    }
+
+    .custom-select option:checked {
+        background: var(--primary);
+        color: white;
+    }
+
+    /* Election Summary Card */
+    .election-summary-card {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        color: white;
+        padding: 2.5rem;
+        border-radius: 20px;
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .election-summary-card h1 {
+        margin: 0.5rem 0;
+        font-size: 2rem;
+    }
+
+    .election-summary-card p {
+        opacity: 0.7;
+        max-width: 600px;
+    }
+
+    .summary-details {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .detail-pill {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 8px 15px;
+        border-radius: 30px;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* Analytics Grid */
+    .analytics-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .analytic-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        padding: 1.5rem;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+    }
+
+    .analytic-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+    }
+
+    .icon-blue {
+        background: #e0e7ff;
+        color: #4338ca;
+    }
+
+    .icon-green {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .icon-purple {
+        background: #f3e8ff;
+        color: #7e22ce;
+    }
+
+    .analytic-label {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+
+    .analytic-value {
+        margin: 0;
+        color: var(--text-main);
+        font-size: 1.5rem;
+    }
+
+    /* Results Visuals */
+    .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-icon-text {
+        background: none;
+        border: 1px solid var(--border-color);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        color: var(--text-main);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.85rem;
+        transition: 0.2s;
+        text-decoration: none;
+        min-height: 40px;
+    }
+
+    .btn-icon-text:hover {
+        background: var(--bg-body);
+        border-color: var(--primary);
+    }
+
+    .positions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .position-results-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 1.5rem;
+    }
+
+    .pos-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .total-v-badge {
+        background: var(--primary-light);
+        color: var(--primary);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 800;
+    }
+
+    .candidate-row {
+        margin-bottom: 1.5rem;
+    }
+
+    .cand-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .cand-votes {
+        color: var(--text-muted);
+    }
+
+    .cand-progress-bg {
+        background: var(--bg-body);
+        height: 24px;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .cand-progress-fill {
+        background: var(--primary);
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 10px;
+        transition: width 1s ease-in-out;
+    }
+
+    .cand-perc {
+        color: white;
+        font-size: 0.75rem;
+        font-weight: 800;
+    }
+
+    /* Winner Styling */
+    .winner-row .cand-name {
+        color: #b45309;
+    }
+
+    .winner-row .cand-progress-fill {
+        background: linear-gradient(90deg, var(--primary) 0%, #f59e0b 100%);
+    }
+
+    .winner-icon {
+        color: #f59e0b;
+        margin-left: 5px;
+    }
+
+    /* Empty States */
+    .no-selection-state {
+        text-align: center;
+        padding: 5rem;
+        background: var(--card-bg);
+        border-radius: 20px;
+        border: 2px dashed var(--border-color);
+    }
+
+    .no-selection-state .empty-icon {
+        font-size: 4rem;
+        color: var(--border-color);
+        margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 992px) {
+        .analytics-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .positions-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .election-summary-card {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+
+        .section-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .election-summary-card {
+            padding: 1.5rem;
+        }
+
+        .election-summary-card h1 {
+            font-size: 1.5rem;
+        }
+
+        .summary-details {
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .detail-pill {
+            font-size: 0.75rem;
+            padding: 6px 12px;
+        }
+
+        .section-title {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .title-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-icon-text {
+            font-size: 0.75rem;
+            padding: 6px 12px;
+        }
+
+        .positions-grid {
+            gap: 1rem;
+        }
+
+        .position-results-card {
+            padding: 1rem;
+        }
+
+        .pos-card-header {
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .selector-form {
+            max-width: 250px;
+        }
+
+        .custom-select {
+            min-width: 140px;
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .results-container {
+            max-width: 100%;
+            padding: 0.75rem;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.25rem;
+            margin: 0;
+        }
+
+        .section-header .text-muted {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .header-left {
+            flex: 1;
+        }
+
+        .header-right {
+            width: 100%;
+        }
+
+        .election-summary-card {
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .summary-main {
+            width: 100%;
+        }
+
+        .election-summary-card h1 {
+            font-size: 1.4rem;
+            margin: 0.5rem 0;
+        }
+
+        .election-summary-card p {
+            font-size: 0.85rem;
+            max-width: 100%;
+        }
+
+        .summary-details {
+            width: 100%;
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .detail-pill {
+            flex: 1;
+            min-width: 140px;
+            font-size: 0.75rem;
+            padding: 0.75rem 0.75rem;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .detail-pill i {
+            display: none;
+        }
+
+        .analytics-grid {
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        }
+
+        .analytic-card {
+            padding: 1rem;
+            border-radius: 10px;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0.75rem;
+        }
+
+        .analytic-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 1.25rem;
+        }
+
+        .analytic-info {
+            width: 100%;
+        }
+
+        .analytic-value {
+            font-size: 1.35rem;
+            margin: 0.25rem 0;
+        }
+
+        .analytic-label {
+            font-size: 0.7rem;
+            display: block;
+        }
+
+        .title-actions {
+            flex-direction: column;
+            width: 100%;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .title-actions .btn-icon-text {
+            width: 100%;
+            justify-content: center;
+            padding: 0.65rem;
+            font-size: 0.75rem;
+            border-radius: 6px;
+        }
+
+        .btn-icon-text {
+            font-size: 0.75rem;
+            padding: 0.6rem 0.75rem;
+            min-height: 40px;
+        }
+
+        .selector-form {
+            max-width: 100%;
+        }
+
+        .select-wrapper {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+        }
+
+        .custom-select {
+            min-width: auto;
+            font-size: 0.8rem;
+            width: 100%;
+            padding: 0.6rem;
+        }
+
+        .position-results-card {
+            padding: 0.85rem;
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+        }
+
+        .pos-card-header {
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .pos-card-header h4 {
+            font-size: 0.95rem;
+            margin: 0;
+            word-break: break-word;
+        }
+
+        .total-v-badge {
+            font-size: 0.65rem;
+            padding: 3px 8px;
+        }
+
+        .candidate-row {
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+        }
+
+        .cand-info {
+            font-size: 0.8rem;
+            gap: 0.5rem;
+        }
+
+        .cand-name {
+            font-weight: 600;
+        }
+
+        .cand-progress-bg {
+            height: 18px;
+            border-radius: 9px;
+        }
+
+        .cand-perc {
+            font-size: 0.6rem;
+            padding: 0 6px;
+        }
+
+        .candidates-list {
+            margin: 0.5rem 0;
+            padding-left: 0.5rem;
+            border-left: 2px solid var(--border-color);
+        }
+
+        .no-selection-state {
+            padding: 2.5rem 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+        }
+
+        .no-selection-state .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-pill {
+            font-size: 0.65rem;
+            padding: 4px 10px;
+        }
+    }
+
+    @media (max-width: 380px) {
+        .results-container {
+            padding: 0.5rem;
+        }
+
+        .section-header {
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.1rem;
+        }
+
+        .section-header .text-muted {
+            display: none;
+        }
+
+        .election-summary-card {
+            padding: 1rem;
+            margin-bottom: 1.25rem;
+            border-radius: 10px;
+        }
+
+        .election-summary-card h1 {
+            font-size: 1.2rem;
+            margin: 0.3rem 0;
+        }
+
+        .summary-details {
+            gap: 0.5rem;
+        }
+
+        .detail-pill {
+            min-width: 120px;
+            font-size: 0.7rem;
+            padding: 0.5rem;
+        }
+
+        .analytics-grid {
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .analytic-card {
+            padding: 0.75rem;
+            border-radius: 8px;
+        }
+
+        .analytic-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 1rem;
+        }
+
+        .analytic-value {
+            font-size: 1.15rem;
+            margin: 0.2rem 0;
+        }
+
+        .analytic-label {
+            font-size: 0.65rem;
+        }
+
+        .title-actions {
+            gap: 0.4rem;
+        }
+
+        .title-actions .btn-icon-text {
+            padding: 0.5rem;
+            font-size: 0.7rem;
+            min-height: 36px;
+        }
+
+        .custom-select {
+            font-size: 0.75rem;
+            padding: 0.5rem;
+        }
+
+        .position-results-card {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .pos-card-header h4 {
+            font-size: 0.85rem;
+        }
+
+        .total-v-badge {
+            font-size: 0.6rem;
+            padding: 2px 6px;
+        }
+
+        .candidate-row {
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+        }
+
+        .cand-info {
+            font-size: 0.75rem;
+        }
+
+        .cand-progress-bg {
+            height: 16px;
+        }
+
+        .cand-perc {
+            font-size: 0.55rem;
+        }
+
+        .status-pill {
+            font-size: 0.6rem;
+            padding: 3px 8px;
+        }
+
+        .no-selection-state {
+            padding: 1.5rem 0.75rem;
+            margin: 0.75rem 0;
+        }
+
+        .no-selection-state .empty-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .no-selection-state h3 {
+            font-size: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        .no-selection-state p {
+            font-size: 0.75rem;
+        }
+    }
+
+    @media print {
+
+        .section-header,
+        .selector-form,
+        .title-actions {
+            display: none !important;
+        }
+
+        .results-container {
+            padding: 0;
+        }
+
+        .election-summary-card {
+            background: white !important;
+            color: black !important;
+            border: 1px solid #ccc;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,298 @@
+{% extends 'base_student.html' %}
+
+{% block title %}Results: {{ election.title }}{% endblock %}
+
+{% block content %}
+<div class="results-container">
+    <div class="results-header-card">
+        <div class="header-main">
+            <h1>{{ election.title }}</h1>
+            <p class="subtitle">{{ election.description }}</p>
+        </div>
+        
+        <div class="header-status">
+            {% if election.is_active %}
+                <div class="status-tag live">
+                    <span class="dot pulse"></span> LIVE COUNTING
+                </div>
+                <p class="date-info">Closes: {{ election.end_datetime|date:"M d, Y H:i" }}</p>
+            {% else %}
+                <div class="status-tag closed">
+                    <span class="dot"></span> ELECTION CLOSED
+                </div>
+                <p class="date-info">Ended: {{ election.end_datetime|date:"M d, Y H:i" }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if election.is_active %}
+        <div class="in-progress-placeholder">
+            <div class="placeholder-content">
+                <div class="icon-wrap">
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <h2>Results are currently sealed</h2>
+                <p>To maintain the integrity of the election, live vote tallies are hidden until the polls officially close.</p>
+                
+                <div class="countdown-timer">
+                    <span class="timer-label">Results will be unsealed in:</span>
+                    <div id="countdown-clock">{{ election.end_datetime|timeuntil }}</div>
+                </div>
+
+                <div class="action-row">
+                    <a href="{% url 'elections_list' %}" class="btn-secondary">Return to Dashboard</a>
+                </div>
+            </div>
+        </div>
+
+        {% if user.is_staff and turnout_stats %}
+            <div class="admin-preview-section">
+                <div class="admin-divider"><span>Staff Preview: Turnout</span></div>
+                <div class="stats-section">
+                    <div class="stat-card">
+                        <span class="stat-value">{{ turnout_stats.total_votes }}</span>
+                        <span class="stat-label">Total Votes Cast</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">{{ turnout_stats.turnout_percentage }}%</span>
+                        <span class="stat-label">Participation Rate</span>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+    {% else %}
+        {% if turnout_stats %}
+            <div class="stats-section">
+                <div class="stat-card">
+                    <span class="stat-icon">👥</span>
+                    <div class="stat-content">
+                        <span class="stat-value">{{ turnout_stats.total_votes }}</span>
+                        <span class="stat-label">Total Ballots Cast</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">📈</span>
+                    <div class="stat-content">
+                        <span class="stat-value">{{ turnout_stats.turnout_percentage }}%</span>
+                        <span class="stat-label">Final Turnout</span>
+                    </div>
+                    <div class="mini-progress">
+                        <div class="bar" style="width: {{ turnout_stats.turnout_percentage|default_if_none:'0' }}%"></div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="results-grid">
+            {% for position, candidates in results.items %}
+                <div class="position-result-card">
+                    <div class="pos-header">
+                        <h3>{{ position }}</h3>
+                        <span class="candidate-count">{{ candidates|length }} Candidates</span>
+                    </div>
+
+                    <div class="candidates-ranking">
+                        {% for candidate in candidates %}
+                            <div class="result-row {% if candidate.is_winner %}is-winner{% endif %}">
+                                <div class="candidate-meta">
+                                    <div class="name-box">
+                                        <span class="name">{{ candidate.full_name }}</span>
+                                        {% if candidate.is_winner %}
+                                            <span class="winner-label">🏆 ELECTED</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="vote-stats">
+                                        <span class="raw-votes">{{ candidate.vote_count }} votes</span>
+                                        <span class="percent">{{ candidate.percentage }}%</span>
+                                    </div>
+                                </div>
+                                <div class="bar-container">
+                                    <div class="fill" style="width: {{ candidate.percentage }}%"></div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% empty %}
+                <div class="empty-state">
+                    <p>No data available for this election.</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="footer-actions">
+        <a href="{% url 'elections_list' %}" class="btn-back">← Back to Elections</a>
+        {% if not election.is_active and user.is_staff %}
+            <button class="btn-print" onclick="window.print()">🖨️ Download Official Report</button>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    /* 1. Theme-Aware Variables */
+    :root {
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --primary-light: #e0e7ff;
+        /* Use the variables defined in base_student.html */
+        /* If they aren't available locally, we define fallbacks here */
+    }
+    
+    /* Override colors when in Dark Mode */
+    [data-theme="dark"] {
+        --card-bg: #1e293b;
+        --bg-body: #0f172a;
+        --border-color: #334155;
+        --text-main: #f1f5f9;
+        --text-muted: #94a3b8;
+        --result-bar-bg: #334155;
+        --winner-bg: #064e3b;
+        --winner-text: #6ee7b7;
+    }
+    
+    /* Light Mode Defaults for local result elements */
+    [data-theme="light"] {
+        --result-bar-bg: #f3f4f6;
+        --winner-bg: #dcfce7;
+        --winner-text: #166534;
+    }
+    
+    .results-container { 
+        max-width: 900px; 
+        margin: 0 auto; 
+        padding: 2rem 1rem; 
+        font-family: 'Inter', sans-serif;
+        color: var(--text-main); /* Ensure text color follows theme */
+    }
+    
+    /* Header Card */
+    .results-header-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        transition: background 0.3s ease, border 0.3s ease;
+    }
+    
+    .header-main h1 { margin: 0; font-size: 1.75rem; color: var(--text-main); }
+    .subtitle { color: var(--text-muted); margin-top: 0.5rem; }
+    
+    .status-tag.closed { 
+        background: var(--border-color); /* Match theme */
+        color: var(--text-muted); 
+    }
+    
+    /* In Progress Placeholder */
+    .in-progress-placeholder {
+        background: var(--card-bg);
+        border: 2px dashed var(--border-color);
+        border-radius: 20px;
+        padding: 5rem 2rem;
+        text-align: center;
+        transition: background 0.3s ease;
+    }
+    
+    .countdown-timer { 
+        margin: 2rem auto; 
+        padding: 1.5rem; 
+        background: var(--bg-body); 
+        border-radius: 12px; 
+        max-width: 300px; 
+    }
+    
+    /* Final Stats & Progress Bars */
+    .stats-section { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+    .stat-card {
+        background: var(--card-bg);
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        position: relative;
+        overflow: hidden;
+        transition: background 0.3s ease;
+    }
+    
+    .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--primary); display: block; }
+    .stat-label { font-size: 0.85rem; color: var(--text-muted); }
+    
+    .position-result-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        transition: background 0.3s ease;
+    }
+    .pos-header { border-bottom: 1px solid var(--border-color); padding-bottom: 10px; display: flex; justify-content: space-between; margin-bottom: 1.5rem; }
+    .pos-header h3 { color: var(--text-main); margin: 0; }
+    
+    .result-row { margin-bottom: 1.25rem; }
+    .candidate-meta { display: flex; justify-content: space-between; margin-bottom: 0.5rem; align-items: flex-end; }
+    .name { font-weight: 600; color: var(--text-main); }
+    
+    .winner-label { 
+        background: var(--winner-bg); 
+        color: var(--winner-text); 
+        padding: 2px 8px; 
+        border-radius: 4px; 
+        font-size: 0.7rem; 
+        font-weight: 700; 
+        margin-left: 8px; 
+    }
+    
+    .vote-stats { font-size: 0.85rem; color: var(--text-muted); }
+    
+    .bar-container { 
+        height: 10px; 
+        background: var(--result-bar-bg); 
+        border-radius: 10px; 
+        overflow: hidden; 
+    }
+    .fill { height: 100%; background: #94a3b8; transition: width 1.5s ease-out; }
+    .is-winner .fill { background: var(--primary); }
+    .btn-back, .btn-print {
+        background: none;
+        border: none;
+        color: var(--primary);
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    .btn-secondary {
+        background: var(--primary-light);
+        color: var(--primary);
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background 0.3s ease;
+    }
+    /* Animation and Responsive logic remains same */
+    @keyframes pulse {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.2); opacity: 0.7; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    .pulse { animation: pulse 2s infinite; }
+    
+    @media (max-width: 640px) {
+        .results-header-card { flex-direction: column; text-align: center; gap: 1.5rem; }
+        .stats-section { grid-template-columns: 1fr; }
+    }
+    
+    @media print {
+        .footer-actions, .status-tag.live, .in-progress-placeholder { display: none !important; }
+    }
+    </style>
+{% endblock %}

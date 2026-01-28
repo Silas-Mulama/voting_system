@@ -1,0 +1,190 @@
+{% extends 'base_student.html' %}
+
+{% block title %}About the Voting System - Butere TTI{% endblock %}
+
+{% block content %}
+<div class="about-container">
+    <header class="about-hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="institute-tag">Official Institutional Platform</span>
+            <h1>Butere Technical Training Institute</h1>
+            <h2>Electronic Voting System</h2>
+            <div class="hero-badge">
+                <i class="fas fa-check-circle"></i> Fair. Secure. Transparent.
+            </div>
+        </div>
+    </header>
+
+    <main class="about-content">
+        
+        <div class="content-grid">
+            <section class="about-card intro-card">
+                <div class="card-header">
+                    <i class="fas fa-university icon-primary"></i>
+                    <h3>Who We Are</h3>
+                </div>
+                <p>
+                    Butere Technical Training Institute (Butere TTI) is a leading public institution dedicated to 
+                    excellence in training and integrity. This platform was developed to empower students through 
+                    a reliable, digital-first approach to choosing their leadership.
+                </p>
+            </section>
+
+            <section class="about-card mission-card">
+                <div class="card-header">
+                    <i class="fas fa-bullseye icon-secondary"></i>
+                    <h3>Our Mission</h3>
+                </div>
+                <p>
+                    To provide a trusted, accessible, and auditable electronic voting platform that strengthens 
+                    democratic processes and ensures every student's voice is heard without compromise.
+                </p>
+            </section>
+        </div>
+
+        <section class="about-card process-section">
+            <div class="card-header">
+                <i class="fas fa-project-diagram icon-success"></i>
+                <h3>The Election Hierarchy</h3>
+            </div>
+            <p class="section-desc">Our platform mirrors real-world democratic structures to ensure organizational clarity.</p>
+            
+            
+            
+            <div class="process-flow">
+                <div class="process-step">
+                    <div class="step-num">01</div>
+                    <h4>Election</h4>
+                    <p>The overarching event (e.g., "SGC Elections 2026").</p>
+                </div>
+                <div class="process-connector"><i class="fas fa-chevron-right"></i></div>
+                <div class="process-step">
+                    <div class="step-num">02</div>
+                    <h4>Position</h4>
+                    <p>The specific office being contested (e.g., "President").</p>
+                </div>
+                <div class="process-connector"><i class="fas fa-chevron-right"></i></div>
+                <div class="process-step">
+                    <div class="step-num">03</div>
+                    <h4>Candidate</h4>
+                    <p>The individual student running for that specific office.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-card">
+            <div class="card-header">
+                <i class="fas fa-shield-alt icon-warning"></i>
+                <h3>Security & Integrity</h3>
+            </div>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-user-check"></i>
+                    <div>
+                        <h4>Verified Access</h4>
+                        <p>Only registered students with active credentials can cast ballots.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-fingerprint"></i>
+                    <div>
+                        <h4>Single Vote Policy</h4>
+                        <p>Our algorithm prevents duplicate voting across all positions.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-file-invoice"></i>
+                    <div>
+                        <h4>Audit Trail</h4>
+                        <p>System logs track activity to ensure no tampering occurs during the window.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-eye-slash"></i>
+                    <div>
+                        <h4>Voter Anonymity</h4>
+                        <p>While we track <em>who</em> voted, your actual ballot remains encrypted and private.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="commitment-banner">
+            <div class="banner-content">
+                <h3>Our Commitment to You</h3>
+                <p>Transparency is not just a feature; it's our foundation. We are constantly evolving based on student feedback and security best practices.</p>
+                <div class="footer-motto">Butere TTI: Shaping Leaders for Tomorrow</div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<style>
+/* Base Styles */
+.about-container { min-height: 100vh; background: var(--bg-body); transition: 0.3s; }
+
+/* Hero Section */
+.about-hero {
+    position: relative;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%), url('/static/images/campus-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 100px 20px;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+}
+
+.hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); }
+.hero-content { position: relative; z-index: 1; }
+
+.institute-tag { background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+.about-hero h1 { font-size: 2.8rem; margin: 15px 0 5px; font-weight: 800; }
+.about-hero h2 { font-size: 1.5rem; font-weight: 300; opacity: 0.9; }
+.hero-badge { display: inline-block; margin-top: 25px; padding: 10px 25px; background: white; color: #4f46e5; border-radius: 50px; font-weight: 700; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+/* Layout Grid */
+.about-content { max-width: 1100px; margin: -50px auto 0; padding: 0 20px 60px; position: relative; z-index: 2; }
+.content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+
+/* Cards */
+.about-card { background: var(--card-bg); border-radius: 16px; padding: 35px; border: 1px solid var(--border-color); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 20px; }
+.card-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+.card-header i { font-size: 1.5rem; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
+.card-header h3 { margin: 0; font-size: 1.4rem; color: var(--text-main); }
+
+.icon-primary { background: #eef2ff; color: #4f46e5; }
+.icon-secondary { background: #fff7ed; color: #f97316; }
+.icon-success { background: #f0fdf4; color: #22c55e; }
+.icon-warning { background: #fef2f2; color: #ef4444; }
+
+.about-card p { line-height: 1.7; color: var(--text-muted); }
+
+/* Process Flow */
+.process-flow { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 40px; padding: 20px; background: var(--bg-body); border-radius: 12px; }
+.process-step { text-align: center; flex: 1; }
+.step-num { width: 40px; height: 40px; background: #4f46e5; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-weight: 800; }
+.process-connector { padding-top: 10px; color: var(--border-color); }
+
+/* Features Grid */
+.features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 25px; }
+.feature-item { display: flex; gap: 20px; }
+.feature-item i { color: #4f46e5; font-size: 1.2rem; margin-top: 5px; }
+.feature-item h4 { margin: 0 0 5px; color: var(--text-main); font-size: 1.1rem; }
+.feature-item p { font-size: 0.9rem; margin: 0; }
+
+/* Commitment Banner */
+.commitment-banner { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; padding: 50px; border-radius: 20px; text-align: center; }
+.banner-content h3 { font-size: 1.8rem; margin-bottom: 15px; }
+.footer-motto { margin-top: 30px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; opacity: 0.8; }
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .content-grid, .features-grid { grid-template-columns: 1fr; }
+    .process-flow { flex-direction: column; gap: 30px; }
+    .process-connector { transform: rotate(90deg); margin: 0 auto; }
+    .about-hero h1 { font-size: 1.8rem; }
+}
+</style>
+{% endblock %}

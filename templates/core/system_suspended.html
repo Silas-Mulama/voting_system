@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Temporarily Unavailable | Butere TTI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #4f46e5;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --info-bg: #f0f4ff;
+        }
+
+        [data-theme="dark"] {
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --info-bg: #0f172a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .suspension-container {
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            max-width: 550px;
+            width: 100%;
+            overflow: hidden;
+            transition: background 0.3s ease;
+        }
+
+        .suspension-header {
+            background: var(--bg-gradient);
+            padding: 50px 30px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .suspension-icon {
+            font-size: 70px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .suspension-header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .suspension-header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .suspension-body {
+            padding: 40px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+        }
+
+        .message-text {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            background: var(--info-bg);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .info-item i {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .info-item span {
+            font-size: 0.8rem;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .logout-button {
+            display: block;
+            width: 100%;
+            background: var(--bg-gradient);
+            color: white;
+            padding: 14px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .logout-button:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .footer-text {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .suspension-container {
+                border-radius: 16px;
+                max-width: 95%;
+            }
+
+            .suspension-header {
+                padding: 40px 25px;
+            }
+
+            .suspension-icon {
+                font-size: 60px;
+                margin-bottom: 15px;
+            }
+
+            .suspension-header h1 {
+                font-size: 1.6rem;
+                margin-bottom: 8px;
+            }
+
+            .suspension-header p {
+                font-size: 0.95rem;
+            }
+
+            .suspension-body {
+                padding: 30px;
+            }
+
+            .status-badge {
+                padding: 5px 12px;
+                font-size: 0.7rem;
+                margin-bottom: 20px;
+            }
+
+            .message-text {
+                font-size: 0.95rem;
+                margin-bottom: 20px;
+                line-height: 1.6;
+            }
+
+            .info-grid {
+                gap: 12px;
+                margin-bottom: 25px;
+            }
+
+            .info-item {
+                padding: 12px;
+            }
+
+            .info-item i {
+                font-size: 1.1rem;
+                margin-bottom: 6px;
+            }
+
+            .info-item span {
+                font-size: 0.75rem;
+            }
+
+            .logout-button {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+
+            .footer-text {
+                padding: 15px;
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            .suspension-container {
+                border-radius: 12px;
+                box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.4);
+            }
+
+            .suspension-header {
+                padding: 30px 20px;
+            }
+
+            .suspension-icon {
+                font-size: 50px;
+                margin-bottom: 12px;
+            }
+
+            .suspension-header h1 {
+                font-size: 1.3rem;
+                margin-bottom: 6px;
+            }
+
+            .suspension-header p {
+                font-size: 0.9rem;
+            }
+
+            .suspension-body {
+                padding: 20px;
+            }
+
+            .status-badge {
+                padding: 4px 10px;
+                font-size: 0.65rem;
+                margin-bottom: 15px;
+            }
+
+            .message-text {
+                font-size: 0.9rem;
+                margin-bottom: 15px;
+                line-height: 1.5;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+
+            .info-item {
+                padding: 10px;
+            }
+
+            .info-item i {
+                font-size: 1rem;
+                margin-bottom: 5px;
+            }
+
+            .info-item span {
+                font-size: 0.7rem;
+            }
+
+            .logout-button {
+                padding: 11px;
+                font-size: 0.9rem;
+                border-radius: 10px;
+            }
+
+            .logout-button:hover {
+                transform: translateY(-1px);
+            }
+
+            .footer-text {
+                padding: 12px;
+                font-size: 0.7rem;
+            }
+
+            /* Admin note styling on mobile */
+            div[style*="border-left"] {
+                padding: 12px !important;
+                font-size: 0.85rem !important;
+                margin-bottom: 15px !important;
+            }
+
+            div[style*="border-left"] strong {
+                display: block;
+                margin-bottom: 6px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="suspension-container">
+        <div class="suspension-header">
+            <div class="suspension-icon"><i class="fas fa-tools"></i></div>
+            <h1>System Maintenance</h1>
+            <p>Butere TTI eVoting Portal</p>
+        </div>
+
+        <div class="suspension-body">
+            <div class="status-badge">
+                <i class="fas fa-circle-notch fa-spin"></i> Service Suspended
+            </div>
+
+            <p class="message-text">
+                The voting system is currently undergoing a scheduled security audit.
+                We anticipate being back online within the hour.
+            </p>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <i class="fas fa-database"></i>
+                    <span>Votes are Secure</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-sync"></i>
+                    <span>Auto-Save Active</span>
+                </div>
+            </div>
+
+            {% if suspension_reason %}
+            <div
+                style="background: rgba(99, 102, 241, 0.1); border-left: 4px solid var(--primary); padding: 15px; border-radius: 8px; margin-bottom: 25px; font-size: 0.9rem; color: var(--text-main);">
+                <strong>Admin Note:</strong> {{ suspension_reason }}
+            </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">Return to Portal</button>
+            </form>
+        </div>
+
+        <div class="footer-text">
+            &copy; 2026 Butere Technical Training Institute
+        </div>
+    </div>
+
+    <script>
+        // Use the same theme logic as the portal
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Optional: Auto-refresh every 5 minutes
+        setTimeout(() => {
+            window.location.reload();
+        }, 300000); 
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+{% extends 'base_auth.html' %}
+
+{% block title %}Student Login - eVoting System{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-box">
+        <h2>Student Login</h2>
+        
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="admission_number">Admission Number:</label>
+                <input type="text" id="admission_number" name="admission_number" placeholder="e.g., DICT/01542/24S" required autofocus>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        
+        <p class="login-link">
+            Are you an admin? <a href="{% url 'admin_login' %}">Login as Admin</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

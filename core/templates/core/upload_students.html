@@ -1,0 +1,545 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}Upload Students - eVoting System{% endblock %}
+
+{% block content %}
+<div class="upload-container">
+    <header class="section-header">
+        <div class="header-left">
+            <h2>Bulk Student Import</h2>
+            <p class="text-muted">Onboard your voters efficiently using CSV or Excel files.</p>
+        </div>
+    </header>
+
+    <div class="upload-grid">
+        <div class="upload-main">
+            <form method="post" enctype="multipart/form-data" id="upload-form">
+                {% csrf_token %}
+                <div class="drop-zone" id="drop-zone">
+                    <div class="drop-zone-content">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <span class="drop-zone-prompt">Drag & drop your file here or <strong>browse</strong></span>
+                        {{ form.file }}
+                    </div>
+                    <div id="file-info" class="file-info-hidden">
+                        <i class="fas fa-file-csv"></i> <span id="file-name"></span>
+                    </div>
+                </div>
+
+                {% if form.file.errors %}
+                <div class="alert alert-error">
+                    <i class="fas fa-exclamation-circle"></i> {{ form.file.errors.0 }}
+                </div>
+                {% endif %}
+
+                <!-- Progress Bar Section -->
+                <div id="progress-section" class="progress-section-hidden">
+                    <div class="progress-header">
+                        <span class="progress-label">Uploading students...</span>
+                        <span class="progress-stats"><span id="progress-current">0</span>/<span
+                                id="progress-total">0</span></span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="progress-bar-fill" style="width: 0%;">
+                            <span class="progress-text" id="progress-percentage">0%</span>
+                        </div>
+                    </div>
+                    <div class="progress-info">
+                        <small id="progress-message">Preparing upload...</small>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-import" id="submit-btn">
+                        <i class="fas fa-file-import"></i> Process Import
+                    </button>
+                    <p class="help-text">Max file size: 5MB (.csv, .xlsx)</p>
+                </div>
+            </form>
+
+            <section class="example-section">
+                <div class="example-header">
+                    <h3>Data Format Preview</h3>
+                    <button class="btn-text-only" onclick="downloadSample()"><i class="fas fa-download"></i> Sample
+                        CSV</button>
+                </div>
+                <div class="table-wrapper">
+                    <table class="table-example">
+                        <thead>
+                            <tr>
+                                <th>admission_number</th>
+                                <th>full_name</th>
+                                <th>email</th>
+                                <th>programme</th>
+                                <th>year_of_study</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="code-text">DICT/01542/24S</span></td>
+                                <td>Brian Omondi</td>
+                                <td>brian.omondi@buteretti.ac.ke</td>
+                                <td>DICT</td>
+                                <td>1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <aside class="upload-sidebar">
+            <div class="card instructions-card">
+                <h3><i class="fas fa-lightbulb"></i> Requirements</h3>
+                <ul class="instruction-list">
+                    <li>
+                        <strong>Strict Format</strong>
+                        <span>Admission format: <code>PROGRAM/ID/INTAKE</code></span>
+                    </li>
+                    <li>
+                        <strong>Passwords</strong>
+                        <span>The system generates secure temporary passwords automatically.</span>
+                    </li>
+                    <li>
+                        <strong>Emails</strong>
+                        <span>A notification will be sent to each student upon successful import.</span>
+                    </li>
+                </ul>
+                <div class="security-note">
+                    <i class="fas fa-shield-alt"></i> Data is encrypted during processing.
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>
+
+<style>
+    /* Layout */
+    .upload-container {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .upload-grid {
+        display: grid;
+        grid-template-columns: 1fr 320px;
+        gap: 2rem;
+        align-items: start;
+    }
+
+    /* Drop Zone */
+    .drop-zone {
+        background: var(--card-bg);
+        border: 2px dashed var(--border-color);
+        border-radius: 16px;
+        padding: 3rem 2rem;
+        text-align: center;
+        transition: 0.3s;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .drop-zone:hover,
+    .drop-zone.drag-over {
+        border-color: var(--primary);
+        background: var(--primary-light);
+    }
+
+    .drop-zone-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .upload-icon {
+        font-size: 3rem;
+        color: var(--primary);
+        opacity: 0.8;
+    }
+
+    .drop-zone-prompt {
+        color: var(--text-main);
+        font-size: 1.1rem;
+    }
+
+    .drop-zone input[type="file"] {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .file-info-hidden {
+        display: none;
+        margin-top: 1rem;
+        font-weight: 600;
+        color: var(--primary);
+    }
+
+    .file-info-active {
+        display: block;
+    }
+
+    /* Buttons & Actions */
+    .form-actions {
+        margin-top: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-import {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.8rem 2rem;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-import:hover {
+        background: var(--primary-hover);
+        transform: translateY(-2px);
+    }
+
+    .help-text {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin: 0;
+    }
+
+    .btn-text-only {
+        background: none;
+        border: none;
+        color: var(--primary);
+        font-weight: 600;
+        cursor: pointer;
+        padding: 0.5rem;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: 0.2s;
+    }
+
+    .btn-text-only:hover {
+        opacity: 0.8;
+    }
+
+    .instructions-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        padding: 1.5rem;
+        border-radius: 16px;
+    }
+
+    .instruction-list {
+        list-style: none;
+        padding: 0;
+        margin: 1.5rem 0;
+    }
+
+    .instruction-list li {
+        margin-bottom: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .instruction-list li strong {
+        font-size: 0.9rem;
+        color: var(--text-main);
+    }
+
+    .instruction-list li span {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        line-height: 1.4;
+    }
+
+    .security-note {
+        font-size: 0.75rem;
+        color: #10b981;
+        background: #ecfdf5;
+        padding: 8px;
+        border-radius: 6px;
+        text-align: center;
+    }
+
+    /* Example Table */
+    .example-section {
+        margin-top: 2.5rem;
+    }
+
+    .example-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .table-wrapper {
+        background: var(--card-bg);
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+    }
+
+    .table-example {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+    }
+
+    .table-example th {
+        background: var(--bg-body);
+        padding: 12px;
+        text-align: left;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    .table-example td {
+        padding: 12px;
+        border-top: 1px solid var(--border-color);
+        color: var(--text-main);
+    }
+
+    .code-text {
+        font-family: monospace;
+        font-weight: 700;
+        color: var(--primary);
+    }
+
+    .btn-text-only {
+        background: none;
+        border: none;
+        color: var(--primary);
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    /* Progress Bar Styles */
+    .progress-section-hidden {
+        display: none;
+        margin: 1.5rem 0;
+    }
+
+    .progress-section-active {
+        display: block;
+        margin: 1.5rem 0;
+    }
+
+    .progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .progress-label {
+        font-weight: 600;
+        color: var(--text-main);
+        font-size: 0.95rem;
+    }
+
+    .progress-stats {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        font-weight: 500;
+    }
+
+    .progress-bar-container {
+        width: 100%;
+        height: 28px;
+        background: var(--bg-body);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary), var(--primary-hover));
+        transition: width 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+        position: relative;
+    }
+
+    .progress-bar-fill::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+        0% {
+            transform: translateX(-100%);
+        }
+
+        100% {
+            transform: translateX(100%);
+        }
+    }
+
+    .progress-text {
+        color: white;
+        font-weight: 700;
+        font-size: 0.75rem;
+        z-index: 1;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .progress-info {
+        margin-top: 0.5rem;
+        text-align: center;
+    }
+
+    .progress-info small {
+        color: var(--text-muted);
+        font-size: 0.8rem;
+    }
+
+
+    @media (max-width: 850px) {
+        .upload-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    const fileInput = document.querySelector('input[type="file"]');
+    const dropZone = document.getElementById('drop-zone');
+    const fileName = document.getElementById('file-name');
+    const fileInfo = document.getElementById('file-info');
+    const uploadForm = document.getElementById('upload-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const progressSection = document.getElementById('progress-section');
+    const progressBarFill = document.getElementById('progress-bar-fill');
+    const progressPercentage = document.getElementById('progress-percentage');
+    const progressCurrent = document.getElementById('progress-current');
+    const progressTotal = document.getElementById('progress-total');
+    const progressMessage = document.getElementById('progress-message');
+
+    let progressInterval = null;
+
+    fileInput.addEventListener('change', (e) => {
+        if (fileInput.files.length) {
+            fileName.textContent = fileInput.files[0].name;
+            fileInfo.classList.add('file-info-active');
+        }
+    });
+
+    // Simple Drag/Drop Visual Feedback
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.add('drag-over'), false);
+    });
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.remove('drag-over'), false);
+    });
+
+    // Handle form submission
+    uploadForm.addEventListener('submit', (e) => {
+        if (!fileInput.files.length) {
+            e.preventDefault();
+            alert('Please select a file to upload');
+            return;
+        }
+
+        // Show progress section and hide form elements
+        progressSection.classList.add('progress-section-active');
+        submitBtn.disabled = true;
+        dropZone.style.opacity = '0.5';
+        dropZone.style.pointerEvents = 'none';
+        progressMessage.textContent = 'Validating file...';
+
+        // Start polling for progress
+        startProgressPolling();
+
+        // Allow form to submit normally - don't preventDefault
+    });
+
+    function startProgressPolling() {
+        progressInterval = setInterval(async () => {
+            try {
+                const response = await fetch('{% url "get_upload_progress" %}', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    updateProgressBar(data);
+
+                    // Stop polling when complete or on error
+                    if (data.status === 'complete' || data.status === 'error') {
+                        clearInterval(progressInterval);
+                        // Form will redirect on completion
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching progress:', error);
+            }
+        }, 500); // Poll every 500ms
+    }
+
+    function updateProgressBar(data) {
+        const percentage = data.percentage || 0;
+        const current = data.current || 0;
+        const total = data.total || 0;
+
+        progressBarFill.style.width = percentage + '%';
+        progressPercentage.textContent = percentage + '%';
+        progressCurrent.textContent = current;
+        progressTotal.textContent = total;
+
+        if (data.status === 'processing') {
+            progressMessage.textContent = `Processing: ${current} of ${total} students created...`;
+        } else if (data.status === 'complete') {
+            progressMessage.textContent = `✓ Complete! ${current} students imported successfully.`;
+        } else if (data.status === 'error') {
+            progressMessage.textContent = `✗ Error during import. Please check error messages above.`;
+        } else {
+            progressMessage.textContent = `${percentage}% complete...`;
+        }
+    }
+
+    function downloadSample() {
+        // Create a simple CSV sample for college/TTI context
+        const csv = 'admission_number,full_name,email,programme,year_of_study\nDICT/01542/24S,Brian Omondi,brian.omondi@buteretti.ac.ke,DICT,1\nBIT/02103/24S,Jane Kariuki,jane.kariuki@buteretti.ac.ke,BIT,2\nDATANA/01789/24S,Samuel Kipchoge,samuel.kipchoge@buteretti.ac.ke,DATA ANALYTICS,1\n';
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'sample_students.csv';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    }
+</script>
+{% endblock %}

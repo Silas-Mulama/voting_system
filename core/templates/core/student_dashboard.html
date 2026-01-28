@@ -1,0 +1,447 @@
+{% extends 'base_student.html' %}
+
+{% block title %}Dashboard | eVoting Student Portal{% endblock %}
+
+{% block content %}
+<div class="dashboard-full">
+
+    <section class="welcome-hero">
+        <div class="hero-text">
+            <h1>Welcome Back, <span class="text-primary-accent">{{ user.full_name|default:user.username }}</span>! 👋
+            </h1>
+            <p>Portal Status: <span class="status-indicator"></span> Verified & Secure Session</p>
+        </div>
+        <div class="hero-id-card">
+            <div class="id-icon"><i class="fas fa-id-card"></i></div>
+            <div class="id-details">
+                <span class="id-label">ADMISSION NUMBER</span>
+                <span class="id-value">{{ user.admission_number }}</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <div class="metric-icon blue"><i class="fas fa-box-archive"></i></div>
+            <div class="metric-info">
+                <span class="metric-label">Available Elections</span>
+                <h2 class="metric-value">{{ active_elections.count }}</h2>
+            </div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-icon green"><i class="fas fa-check-circle"></i></div>
+            <div class="metric-info">
+                <span class="metric-label">Votes Cast</span>
+                <h2 class="metric-value">{{ total_votes }}</h2>
+            </div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-icon orange"><i class="fas fa-percentage"></i></div>
+            <div class="metric-info">
+                <span class="metric-label">Participation</span>
+                <h2 class="metric-value">{{ participation_rate }}%</h2>
+            </div>
+        </div>
+    </div>
+
+    <section class="actions-container">
+        <h2 class="section-title">Navigation Hub</h2>
+        <div class="actions-flex">
+
+            <div class="hub-card {% if active_elections %}highlight-pulse{% endif %}">
+                <div class="hub-header">
+                    <i class="fas fa-vote-yea hub-icon"></i>
+                    {% if active_elections %}
+                    <span class="badge-live">Live</span>
+                    {% endif %}
+                </div>
+                <h3>Cast Your Vote</h3>
+                <p>Select from the list of ongoing elections to exercise your right.</p>
+                <a href="{% url 'elections_list' %}" class="btn-primary">
+                    Go to Ballots <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="hub-card">
+                <div class="hub-header">
+                    <i class="fas fa-chart-bar hub-icon"></i>
+                </div>
+                <h3>Election Results</h3>
+                <p>View the outcome of concluded elections and tally distributions.</p>
+                <a href="{% url 'elections_list' %}" class="btn-outline">
+                    View Winners
+                </a>
+            </div>
+
+            <div class="hub-card">
+                <div class="hub-header">
+                    <i class="fas fa-shield-halved hub-icon"></i>
+                </div>
+                <h3>Security Settings</h3>
+                <p>Keep your account safe. Update your login credentials regularly.</p>
+                <a href="{% url 'change_password' %}" class="btn-outline">
+                    Change Password
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+</div>
+
+<style>
+    /* Theme Adaptations */
+    .text-primary-accent {
+        color: var(--primary);
+    }
+
+    /* Hero Section */
+    .welcome-hero {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .hero-text h1 {
+        margin: 0;
+        font-size: 1.85rem;
+        color: var(--text-main);
+    }
+
+    .hero-text p {
+        margin: 5px 0 0;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+    }
+
+    .status-indicator {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: #10b981;
+        border-radius: 50%;
+        margin-right: 5px;
+        box-shadow: 0 0 8px #10b981;
+    }
+
+    .hero-id-card {
+        background: var(--bg-body);
+        /* Adaptable background */
+        padding: 0.75rem 1.25rem;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border: 1px solid var(--border-color);
+    }
+
+    .id-icon {
+        font-size: 1.5rem;
+        color: var(--primary);
+    }
+
+    .id-label {
+        display: block;
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: var(--text-muted);
+    }
+
+    .id-value {
+        font-family: 'Courier New', monospace;
+        font-weight: 700;
+        color: var(--text-main);
+    }
+
+    /* Metrics */
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .metric-card {
+        background: var(--card-bg);
+        /* Adaptable background */
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .metric-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+
+    /* Keep metric icon colors vibrant even in dark mode */
+    .blue {
+        background: rgba(59, 130, 246, 0.15);
+        color: #3b82f6;
+    }
+
+    .green {
+        background: rgba(16, 185, 129, 0.15);
+        color: #10b981;
+    }
+
+    .orange {
+        background: rgba(245, 158, 11, 0.15);
+        color: #f59e0b;
+    }
+
+    .metric-label {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        font-weight: 500;
+    }
+
+    .metric-value {
+        margin: 0;
+        font-size: 1.5rem;
+        color: var(--text-main);
+    }
+
+    /* Hub Cards */
+    .section-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--text-main);
+    }
+
+    .actions-flex {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .hub-card {
+        background: var(--card-bg);
+        /* Adaptable background */
+        border: 1px solid var(--border-color);
+        padding: 2rem;
+        border-radius: 16px;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .hub-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1);
+        border-color: var(--primary);
+    }
+
+    .hub-icon {
+        font-size: 2rem;
+        color: var(--primary);
+        margin-bottom: 1.25rem;
+    }
+
+    .hub-card h3 {
+        margin: 0 0 10px;
+        font-size: 1.2rem;
+        color: var(--text-main);
+    }
+
+    .hub-card p {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+    }
+
+    /* Buttons */
+    .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--primary);
+        color: white;
+        text-decoration: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: 0.2s;
+    }
+
+    .btn-outline {
+        display: inline-block;
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        text-decoration: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .btn-outline:hover {
+        background: var(--bg-body);
+        border-color: var(--text-muted);
+    }
+
+    .badge-live {
+        background: #ef4444;
+        color: white;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+
+    /* Animation */
+    .highlight-pulse {
+        border: 2px solid var(--primary);
+        animation: pulse-border 2s infinite;
+    }
+
+    @keyframes pulse-border {
+        0% {
+            box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+        }
+
+        70% {
+            box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+        }
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .welcome-hero {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-text h1 {
+            font-size: 1.4rem;
+        }
+
+        .hero-id-card {
+            width: 100%;
+            padding: 1rem;
+        }
+
+        .metrics-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            padding: 1rem;
+        }
+
+        .actions-flex {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .hub-card {
+            padding: 1.5rem;
+        }
+
+        .hub-card:hover {
+            transform: none;
+        }
+
+        .badge-live {
+            top: 12px;
+            right: 12px;
+            padding: 3px 8px;
+            font-size: 0.65rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-text h1 {
+            font-size: 1.1rem;
+        }
+
+        .hero-text p {
+            font-size: 0.85rem;
+        }
+
+        .hero-id-card {
+            padding: 0.75rem;
+            gap: 10px;
+        }
+
+        .id-icon {
+            font-size: 1.2rem;
+        }
+
+        .metric-card {
+            padding: 0.75rem;
+            gap: 0.75rem;
+        }
+
+        .metric-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 1rem;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+        }
+
+        .metric-value {
+            font-size: 1.25rem;
+        }
+
+        .hub-card {
+            padding: 1rem;
+        }
+
+        .hub-card h3 {
+            font-size: 1rem;
+        }
+
+        .hub-card p {
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .hub-icon {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary,
+        .btn-outline {
+            padding: 0.65rem 1.25rem;
+            font-size: 0.85rem;
+            width: 100%;
+            text-align: center;
+            display: block;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+    }
+</style>
+{% endblock %}
