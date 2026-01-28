@@ -4,18 +4,11 @@
 
 {% block content %}
 <div class="dashboard-full">
-<<<<<<< HEAD
 
     <section class="welcome-hero">
         <div class="hero-text">
             <h1>Welcome Back, <span class="text-primary-accent">{{ user.full_name|default:user.username }}</span>! 👋
             </h1>
-=======
-    
-    <section class="welcome-hero">
-        <div class="hero-text">
-            <h1>Welcome Back, <span class="text-primary-accent">{{ user.full_name|default:user.username }}</span>! 👋</h1>
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
             <p>Portal Status: <span class="status-indicator"></span> Verified & Secure Session</p>
         </div>
         <div class="hero-id-card">
@@ -54,20 +47,11 @@
     <section class="actions-container">
         <h2 class="section-title">Navigation Hub</h2>
         <div class="actions-flex">
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
             <div class="hub-card {% if active_elections %}highlight-pulse{% endif %}">
                 <div class="hub-header">
                     <i class="fas fa-vote-yea hub-icon"></i>
                     {% if active_elections %}
-<<<<<<< HEAD
                     <span class="badge-live">Live</span>
-=======
-                        <span class="badge-live">Live</span>
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                     {% endif %}
                 </div>
                 <h3>Cast Your Vote</h3>
@@ -106,13 +90,9 @@
 
 <style>
     /* Theme Adaptations */
-<<<<<<< HEAD
     .text-primary-accent {
         color: var(--primary);
     }
-=======
-    .text-primary-accent { color: var(--primary); }
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
     /* Hero Section */
     .welcome-hero {
@@ -122,7 +102,6 @@
         margin-bottom: 2.5rem;
     }
 
-<<<<<<< HEAD
     .hero-text h1 {
         margin: 0;
         font-size: 1.85rem;
@@ -135,11 +114,6 @@
         font-size: 0.95rem;
     }
 
-=======
-    .hero-text h1 { margin: 0; font-size: 1.85rem; color: var(--text-main); }
-    .hero-text p { margin: 5px 0 0; color: var(--text-muted); font-size: 0.95rem; }
-    
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
     .status-indicator {
         display: inline-block;
         width: 8px;
@@ -151,12 +125,8 @@
     }
 
     .hero-id-card {
-<<<<<<< HEAD
         background: var(--bg-body);
         /* Adaptable background */
-=======
-        background: var(--bg-body); /* Adaptable background */
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         padding: 0.75rem 1.25rem;
         border-radius: 10px;
         display: flex;
@@ -165,7 +135,6 @@
         border: 1px solid var(--border-color);
     }
 
-<<<<<<< HEAD
     .id-icon {
         font-size: 1.5rem;
         color: var(--primary);
@@ -183,11 +152,6 @@
         font-weight: 700;
         color: var(--text-main);
     }
-=======
-    .id-icon { font-size: 1.5rem; color: var(--primary); }
-    .id-label { display: block; font-size: 0.65rem; font-weight: 700; color: var(--text-muted); }
-    .id-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--text-main); }
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
     /* Metrics */
     .metrics-grid {
@@ -198,12 +162,8 @@
     }
 
     .metric-card {
-<<<<<<< HEAD
         background: var(--card-bg);
         /* Adaptable background */
-=======
-        background: var(--card-bg); /* Adaptable background */
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         padding: 1.5rem;
         border-radius: 12px;
         border: 1px solid var(--border-color);
@@ -224,7 +184,6 @@
     }
 
     /* Keep metric icon colors vibrant even in dark mode */
-<<<<<<< HEAD
     .blue {
         background: rgba(59, 130, 246, 0.15);
         color: #3b82f6;
@@ -260,17 +219,6 @@
         color: var(--text-main);
     }
 
-=======
-    .blue { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
-    .green { background: rgba(16, 185, 129, 0.15); color: #10b981; }
-    .orange { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
-
-    .metric-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
-    .metric-value { margin: 0; font-size: 1.5rem; color: var(--text-main); }
-
-    /* Hub Cards */
-    .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-main); }
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
     .actions-flex {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -278,12 +226,8 @@
     }
 
     .hub-card {
-<<<<<<< HEAD
         background: var(--card-bg);
         /* Adaptable background */
-=======
-        background: var(--card-bg); /* Adaptable background */
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         border: 1px solid var(--border-color);
         padding: 2rem;
         border-radius: 16px;
@@ -293,7 +237,6 @@
 
     .hub-card:hover {
         transform: translateY(-5px);
-<<<<<<< HEAD
         box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1);
         border-color: var(--primary);
     }
@@ -316,15 +259,6 @@
         margin-bottom: 1.5rem;
         line-height: 1.5;
     }
-=======
-        box-shadow: 0 12px 20px -5px rgba(0,0,0,0.1);
-        border-color: var(--primary);
-    }
-
-    .hub-icon { font-size: 2rem; color: var(--primary); margin-bottom: 1.25rem; }
-    .hub-card h3 { margin: 0 0 10px; font-size: 1.2rem; color: var(--text-main); }
-    .hub-card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.5; }
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
     /* Buttons */
     .btn-primary {
@@ -352,14 +286,10 @@
         font-size: 0.9rem;
     }
 
-<<<<<<< HEAD
     .btn-outline:hover {
         background: var(--bg-body);
         border-color: var(--text-muted);
     }
-=======
-    .btn-outline:hover { background: var(--bg-body); border-color: var(--text-muted); }
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
     .badge-live {
         background: #ef4444;
@@ -381,7 +311,6 @@
     }
 
     @keyframes pulse-border {
-<<<<<<< HEAD
         0% {
             box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
         }
@@ -512,11 +441,6 @@
             font-size: 1rem;
             margin-bottom: 1rem;
         }
-=======
-        0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
-        70% { box-shadow: 0 0 0 10px rgba(79, 70, 229, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
     }
 </style>
 {% endblock %}

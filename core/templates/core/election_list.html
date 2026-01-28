@@ -15,7 +15,6 @@
     </header>
 
     {% if elections %}
-<<<<<<< HEAD
     <div class="elections-grid">
         {% for election in elections %}
         <div class="election-card">
@@ -71,7 +70,6 @@
         <p>Ready to start the voting process? Create your first election below.</p>
         <a href="{% url 'election_create' %}" class="btn-create">Get Started</a>
     </div>
-=======
         <div class="elections-grid">
             {% for election in elections %}
                 <div class="election-card">
@@ -127,12 +125,10 @@
             <p>Ready to start the voting process? Create your first election below.</p>
             <a href="{% url 'election_create' %}" class="btn-create">Get Started</a>
         </div>
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
     {% endif %}
 </div>
 
 <style>
-<<<<<<< HEAD
     /* Header Styling */
     .section-header {
         display: flex;
@@ -721,194 +717,4 @@
         });
     });
 </script>
-=======
-/* Header Styling */
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2.5rem;
-}
-.section-header h2 { margin: 0; color: var(--text-main); font-weight: 800; }
-
-.btn-create {
-    background: var(--primary);
-    color: white;
-    text-decoration: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 10px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: 0.3s;
-}
-.btn-create:hover { background: var(--primary-hover); transform: translateY(-2px); }
-
-/* Grid & Cards */
-.elections-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 2rem;
-}
-
-.election-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    transition: all 0.3s ease;
-    overflow: hidden;
-    position: relative;
-}
-.election-card:hover { 
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.08);
-}
-
-.card-top {
-    padding: 1.25rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* Status Badges */
-.status-badge {
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 4px 12px;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    text-transform: uppercase;
-}
-.status-badge i { font-size: 0.5rem; }
-
-.status-active { background: #dcfce7; color: #166534; }
-.status-draft { background: #e0f2fe; color: #075985; }
-.status-closed { background: #fef2f2; color: #991b1b; }
-
-/* Dropdown Menu */
-.dropdown-actions { position: relative; cursor: pointer; color: var(--text-muted); padding: 5px; }
-.dropdown-content {
-    display: none;
-    position: absolute;
-    right: 0;
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    z-index: 10;
-    min-width: 120px;
-}
-.dropdown-actions:hover .dropdown-content { display: block; }
-.dropdown-content a, .delete-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px;
-    color: var(--text-main);
-    text-decoration: none;
-    font-size: 0.85rem;
-    width: 100%;
-    border: none;
-    background: none;
-    text-align: left;
-    cursor: pointer;
-}
-.dropdown-content a:hover { background: var(--bg-body); }
-.delete-btn { color: #ef4444; }
-.delete-btn:hover { background: #fef2f2; }
-
-/* Card Content */
-.card-body { padding: 0 1.25rem 1.25rem 1.25rem; }
-.card-body h3 { margin: 0 0 0.5rem 0; color: var(--text-main); font-size: 1.2rem; }
-.description { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.25rem; }
-
-.election-timeline {
-    background: var(--bg-body);
-    padding: 1rem;
-    border-radius: 12px;
-    margin-bottom: 1.5rem;
-}
-.timeline-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.85rem;
-    color: var(--text-main);
-    margin-bottom: 6px;
-}
-.timeline-item:last-child { margin-bottom: 0; }
-.timeline-item i { color: var(--primary); width: 16px; }
-
-/* Footer */
-.card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid var(--border-color);
-    padding-top: 1.25rem;
-}
-.info-pill { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
-.btn-manage {
-    color: var(--primary);
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 0.5rem 0.75rem;
-    border-radius: 6px;
-    transition: 0.2s;
-    min-height: 40px;
-}
-.btn-manage:hover { gap: 10px; background: var(--primary-light); }
-
-.btn-create {
-    min-height: 44px;
-}
-
-/* Empty State */
-.empty-state {
-    text-align: center;
-    padding: 5rem 2rem;
-    background: var(--card-bg);
-    border-radius: 20px;
-    border: 2px dashed var(--border-color);
-}
-.empty-icon { font-size: 4rem; margin-bottom: 1rem; }
-
-/* Responsive */
-@media (max-width: 1200px) {
-    .elections-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
-}
-
-@media (max-width: 768px) {
-    .section-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
-    .section-header h2 { font-size: 1.5rem; }
-    .elections-grid { grid-template-columns: 1fr; gap: 1rem; }
-    .election-card { border-radius: 12px; }
-    .card-footer { flex-direction: column; align-items: flex-start; gap: 1rem; }
-    .btn-manage { align-self: flex-end; }
-    .card-top { padding: 1rem; }
-    .card-body { padding: 0 1rem 1rem 1rem; }
-}
-
-@media (max-width: 576px) {
-    .section-header h2 { font-size: 1.25rem; }
-    .btn-create { width: 100%; justify-content: center; padding: 0.65rem 1.25rem; min-height: 44px; font-size: 0.9rem; }
-    .card-body h3 { font-size: 1rem; }
-    .description { font-size: 0.8rem; }
-    .timeline-item { font-size: 0.75rem; }
-    .status-badge { font-size: 0.65rem; padding: 3px 10px; }
-    .empty-state { padding: 3rem 1rem; }
-    .empty-icon { font-size: 3rem; }
-    .btn-manage { padding: 0.6rem 0.75rem; font-size: 0.85rem; }
-    .card-footer { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
-}
-</style>
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 {% endblock %}

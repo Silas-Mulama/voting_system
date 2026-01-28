@@ -7,11 +7,7 @@ from .utils import StudentBulkUploadValidator
 class StudentBulkUploadForm(forms.Form):
     file = forms.FileField(
         label='Upload CSV or Excel file',
-<<<<<<< HEAD
         help_text='Accepted formats: CSV, Excel (.xlsx). Required columns: admission_number, full_name, email, programme, year_of_study'
-=======
-        help_text='Accepted formats: CSV, Excel (.xlsx). Required columns: admission_number, full_name, class_form'
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
     )
     
     def clean_file(self):

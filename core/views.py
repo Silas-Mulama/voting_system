@@ -9,10 +9,7 @@ from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 import uuid
 import csv
-<<<<<<< HEAD
 import json
-=======
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 from .decorators import student_required, admin_required, voting_page_required
 from .models import Election, Position, Candidate, Vote
 from .forms import StudentBulkUploadForm, ElectionForm, PositionForm, CandidateForm
@@ -200,20 +197,6 @@ def student_dashboard(request):
     return render(request, 'core/student_dashboard.html', context)
 
 
-<<<<<<< HEAD
-=======
-@login_required
-def logout_view(request):
-    """Logout view."""
-    user = request.user
-    # ✅ LOG: User logout
-    log_audit_event(request, 'logout', f'User logout: {user.full_name if user.is_authenticated else "Unknown"}', user if user.is_authenticated else None)
-    logout(request)
-    messages.success(request, 'Logged out successfully.')
-    return redirect('admin_login')
-
-
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 # ==================== STUDENT BULK UPLOAD ====================
 
 @login_required(login_url='admin_login')
@@ -221,12 +204,9 @@ def logout_view(request):
 @require_http_methods(["GET", "POST"])
 @login_required(login_url='admin_login')
 @admin_required
-<<<<<<< HEAD
 @login_required(login_url='admin_login')
 @admin_required
 @require_http_methods(["GET", "POST"])
-=======
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 def upload_students(request):
     """Handle bulk student upload."""
     if request.method == 'POST':
@@ -237,7 +217,6 @@ def upload_students(request):
             
             try:
                 validator.validate_file(file_obj)
-<<<<<<< HEAD
                 
                 # Store progress tracking info in session
                 request.session['upload_progress'] = {
@@ -268,9 +247,6 @@ def upload_students(request):
                     'total': len(validator.valid_rows)
                 }
                 request.session.save()
-=======
-                created, errors = bulk_create_students(validator.valid_rows)
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                 
                 if errors:
                     for error in errors:
@@ -292,7 +268,6 @@ def upload_students(request):
                     ]
                     request.session['import_count'] = len(created)
                     
-<<<<<<< HEAD
                     # Clear upload progress from session
                     request.session.pop('upload_progress', None)
                     request.session.save()
@@ -301,10 +276,6 @@ def upload_students(request):
             except Exception as e:
                 request.session.pop('upload_progress', None)
                 request.session.save()
-=======
-                    return redirect('student_credentials')
-            except Exception as e:
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                 messages.error(request, f"Import failed: {str(e)}")
     else:
         form = StudentBulkUploadForm()
@@ -315,7 +286,6 @@ def upload_students(request):
 
 @login_required(login_url='admin_login')
 @admin_required
-<<<<<<< HEAD
 @require_http_methods(["GET"])
 def get_upload_progress(request):
     """Get the current upload progress."""
@@ -331,8 +301,6 @@ def get_upload_progress(request):
 
 @login_required(login_url='admin_login')
 @admin_required
-=======
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 def student_credentials(request):
     """Display student credentials after import."""
     credentials = request.session.get('import_credentials', [])
@@ -623,10 +591,7 @@ def candidate_delete(request, pk):
 
 @login_required(login_url='student_login')
 @student_required
-<<<<<<< HEAD
 @require_http_methods(["GET"])
-=======
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 def elections_list(request):
     """List elections for students."""
     elections = Election.objects.all()
