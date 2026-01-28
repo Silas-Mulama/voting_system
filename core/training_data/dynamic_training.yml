@@ -1,0 +1,13 @@
+categories:
+- dynamic_training
+conversations:
+- - how to add students
+  - Go to Admin Dashboard → Import Students → Upload. You can upload CSV or Excel
+    files containing student details.
+- - how to cast
+  - To vote, log in to your student account, go to the Elections page, select an active
+    election, and click "Vote" for each position. Your vote is confidential and secure.
+- - how to check update my profile
+  - 'To update your profile: 1) Log in to the system. 2) Go to your Dashboard. 3)
+    Click on Profile. 4) Select Edit Profile. 5) Update your details (name, email,
+    photo). 6) Click Save Changes. Your profile will be updated immediately.'

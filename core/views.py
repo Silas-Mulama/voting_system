@@ -11,7 +11,7 @@ import uuid
 import csv
 import json
 from .decorators import student_required, admin_required, voting_page_required
-from .models import Election, Position, Candidate, Vote
+from .models import BotQuestion, Election, Position, Candidate, Vote
 from .forms import StudentBulkUploadForm, ElectionForm, PositionForm, CandidateForm
 from .utils import StudentBulkUploadValidator, bulk_create_students, log_audit_event
 
@@ -166,11 +166,13 @@ def admin_dashboard(request):
     elections_count = Election.objects.count()
     active_elections = Election.objects.filter(status='active').count()
     total_students = User.objects.filter(is_student=True).count()
+    unanswered_count = BotQuestion.objects.filter(is_answered=False).count()
     
     context = {
         'elections_count': elections_count,
         'active_elections': active_elections,
         'total_students': total_students,
+        'unanswered_count': unanswered_count,
     }
     return render(request, 'core/admin_dashboard.html', context)
 
@@ -1177,3 +1179,152 @@ def activity_log(request):
 	# This is a stub - will implement full activity log later
 	messages.info(request, 'Activity log feature coming soon')
 	return redirect('admin_profile')
+
+
+# ============================================================
+# CHATBOT VIEW
+# ============================================================
+
+@login_required(login_url='student_login')
+@student_required
+@login_required(login_url='student_login')
+@student_required
+def chat_view(request):
+	"""Chat view for the voting assistant chatbot."""
+	from .chatbot import voting_bot
+	from .models import BotQuestion
+	
+	bot_response = None
+	user_message = None
+	
+	if request.method == 'POST':
+		user_message = request.POST.get('message', '').strip()
+		if user_message:
+			# Get response with confidence score
+			result = voting_bot.get_response(user_message)
+			response_text = result['response']
+			confidence = result['confidence']
+			
+			# Log the query
+			log_audit_event(request, 'chatbot_query', f'Asked chatbot: {user_message[:100]}', request.user)
+			
+			# If confidence is low, save question for admin review
+			if confidence < voting_bot.confidence_threshold:
+				try:
+					# Save or get existing question (unique constraint handles duplicates)
+					bot_question, created = BotQuestion.objects.get_or_create(
+						question=user_message,
+						defaults={'answer': None, 'is_answered': False}
+					)
+					if created:
+						log_audit_event(request, 'unanswered_question', f'Question saved for review: {user_message[:100]}', request.user)
+					
+					# Modify response to indicate question was saved
+					bot_response = f"{response_text}\n\n💾 Your question has been saved. Our admin team will review it soon."
+				except Exception as e:
+					bot_response = response_text
+			else:
+				bot_response = response_text
+			
+			# If AJAX request, return JSON
+			if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+				return JsonResponse({
+					'success': True,
+					'message': user_message,
+					'bot_response': bot_response,
+					'confidence': confidence
+				})
+	
+	context = {
+		'user_message': user_message,
+		'bot_response': bot_response,
+	}
+	
+	return render(request, 'core/student_chat.html', context)
+
+
+@login_required(login_url='admin_login')
+@admin_required
+def admin_chat_view(request):
+	"""Chat view for the admin assistant chatbot."""
+	from .chatbot import admin_bot
+	from .models import BotQuestion
+	
+	bot_response = None
+	user_message = None
+	
+	if request.method == 'POST':
+		user_message = request.POST.get('message', '').strip()
+		if user_message:
+			# Get response with confidence score
+			result = admin_bot.get_response(user_message)
+			response_text = result['response']
+			confidence = result['confidence']
+			
+			# Log the query
+			log_audit_event(request, 'chatbot_query', f'Admin asked: {user_message[:100]}', request.user)
+			
+			# If confidence is low, save question for admin review
+			if confidence < admin_bot.confidence_threshold:
+				try:
+					# Save or get existing question
+					bot_question, created = BotQuestion.objects.get_or_create(
+						question=user_message,
+						defaults={'answer': None, 'is_answered': False}
+					)
+					if created:
+						log_audit_event(request, 'unanswered_question', f'Admin question saved for training: {user_message[:100]}', request.user)
+					
+					# Modify response
+					bot_response = f"{response_text}\n\n💾 Your question has been saved for training data. Go to Django Admin > Bot Questions to add an answer."
+				except Exception as e:
+					bot_response = response_text
+			else:
+				bot_response = response_text
+			
+			# If AJAX request, return JSON
+			if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+				return JsonResponse({
+					'success': True,
+					'message': user_message,
+					'bot_response': bot_response,
+					'confidence': confidence
+				})
+	
+	context = {
+		'user_message': user_message,
+		'bot_response': bot_response,
+	}
+	
+	return render(request, 'core/admin_chat.html', context)
+
+
+@login_required(login_url='admin_login')
+@admin_required
+def bot_questions_review(request):
+	"""Page for admins to review and answer unanswered bot questions."""
+	from .models import BotQuestion
+	
+	# Get filter parameter
+	status_filter = request.GET.get('status', 'unanswered')
+	
+	if status_filter == 'answered':
+		questions = BotQuestion.objects.filter(is_answered=True).order_by('-updated_at')
+		page_title = "Answered Questions"
+	else:
+		questions = BotQuestion.objects.filter(is_answered=False).order_by('-created_at')
+		page_title = "Unanswered Questions"
+	
+	# Get counts for tabs
+	unanswered_count = BotQuestion.objects.filter(is_answered=False).count()
+	answered_count = BotQuestion.objects.filter(is_answered=True).count()
+	
+	context = {
+		'questions': questions,
+		'page_title': page_title,
+		'status_filter': status_filter,
+		'unanswered_count': unanswered_count,
+		'answered_count': answered_count,
+	}
+	
+	return render(request, 'core/bot_questions_review.html', context)

@@ -1,0 +1,471 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}Bot Questions Review - eVoting System{% endblock %}
+
+{% block content %}
+<div class="questions-review-wrapper">
+    <header class="review-header">
+        <div class="header-content">
+            <h1><i class="fas fa-comments"></i> Bot Questions Review</h1>
+            <p class="subtitle">Review and answer questions users asked the chatbot</p>
+        </div>
+    </header>
+
+    <div class="review-container">
+        <!-- Tabs -->
+        <div class="review-tabs">
+            <a href="?status=unanswered" class="tab-btn {% if status_filter == 'unanswered' %}active{% endif %}">
+                <i class="fas fa-hourglass-half"></i>
+                Unanswered <span class="tab-badge">{{ unanswered_count }}</span>
+            </a>
+            <a href="?status=answered" class="tab-btn {% if status_filter == 'answered' %}active{% endif %}">
+                <i class="fas fa-check-circle"></i>
+                Answered <span class="tab-badge">{{ answered_count }}</span>
+            </a>
+        </div>
+
+        <!-- Questions List -->
+        <div class="questions-list">
+            {% if questions %}
+            {% for question in questions %}
+            <div class="question-item {% if question.is_answered %}answered{% else %}unanswered{% endif %}">
+                <div class="question-header">
+                    <div class="question-meta">
+                        <span class="status-badge {% if question.is_answered %}answered{% else %}pending{% endif %}">
+                            {% if question.is_answered %}✓ Answered{% else %}⏳ Pending{% endif %}
+                        </span>
+                        <span class="date-badge">{{ question.created_at|date:"M d, Y" }}</span>
+                    </div>
+                    <a href="/admin/core/botquestion/{{ question.id }}/change/" class="edit-btn" target="_blank">
+                        <i class="fas fa-edit"></i> Edit in Admin
+                    </a>
+                </div>
+
+                <div class="question-content">
+                    <p class="question-text">
+                        <strong>Question:</strong><br>
+                        {{ question.question }}
+                    </p>
+
+                    {% if question.answer %}
+                    <p class="answer-text">
+                        <strong>Answer:</strong><br>
+                        {{ question.answer }}
+                    </p>
+                    {% else %}
+                    <p class="no-answer-text">
+                        <i class="fas fa-info-circle"></i> No answer provided yet
+                    </p>
+                    {% endif %}
+                </div>
+
+                <div class="question-footer">
+                    <small class="text-muted">
+                        Last updated: {{ question.updated_at|date:"M d, Y H:i" }}
+                    </small>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    {% if status_filter == 'answered' %}
+                    <i class="fas fa-inbox"></i>
+                    {% else %}
+                    <i class="fas fa-check-double"></i>
+                    {% endif %}
+                </div>
+                <h3>
+                    {% if status_filter == 'answered' %}
+                    No Answered Questions Yet
+                    {% else %}
+                    All Questions Answered! 🎉
+                    {% endif %}
+                </h3>
+                <p>
+                    {% if status_filter == 'answered' %}
+                    Once you answer questions in Django Admin, they'll appear here.
+                    {% else %}
+                    Great job! Every question has been answered. Check the "Answered" tab to review them.
+                    {% endif %}
+                </p>
+                {% if status_filter == 'unanswered' %}
+                <a href="/admin/core/botquestion/" class="btn-primary" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> Open Django Admin
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Export Section -->
+        {% if status_filter == 'answered' and answered_count > 0 %}
+        <div class="export-section">
+            <div class="export-card">
+                <div class="export-info">
+                    <h4><i class="fas fa-file-export"></i> Export Training Data</h4>
+                    <p>Export all answered questions to train the chatbot. Run this command in your terminal:</p>
+                    <code class="export-code">python manage.py export_bot_training</code>
+                    <p class="export-note">After export, restart your Django server for changes to take effect.</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    /* Theme Variables */
+    :root {
+        --review-bg: #f8fafc;
+        --review-card: #ffffff;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --border-color: #e2e8f0;
+        --badge-pending: #f59e0b;
+        --badge-answered: #10b981;
+        --accent: #4f46e5;
+    }
+
+    [data-theme="dark"] {
+        --review-bg: #0f172a;
+        --review-card: #1e293b;
+        --text-main: #f1f5f9;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+    }
+
+    .questions-review-wrapper {
+        padding: 2rem;
+        background: var(--review-bg);
+        min-height: 100vh;
+    }
+
+    .review-header {
+        margin-bottom: 2rem;
+    }
+
+    .review-header h1 {
+        margin: 0;
+        font-size: 2rem;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .review-header .subtitle {
+        margin: 0.5rem 0 0;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+    }
+
+    .review-container {
+        max-width: 1000px;
+    }
+
+    /* Tabs */
+    .review-tabs {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 0;
+    }
+
+    .tab-btn {
+        padding: 1rem 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 500;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: -2px;
+    }
+
+    .tab-btn:hover {
+        color: var(--text-main);
+    }
+
+    .tab-btn.active {
+        color: var(--accent);
+        border-bottom-color: var(--accent);
+    }
+
+    .tab-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        background: var(--accent);
+        color: white;
+        border-radius: 50%;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    /* Questions List */
+    .questions-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .question-item {
+        background: var(--review-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .question-item:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border-color: var(--accent);
+    }
+
+    .question-item.answered {
+        border-left: 4px solid var(--badge-answered);
+    }
+
+    .question-item.unanswered {
+        border-left: 4px solid var(--badge-pending);
+    }
+
+    .question-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .question-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.4rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .status-badge.pending {
+        background: rgba(245, 158, 11, 0.1);
+        color: var(--badge-pending);
+    }
+
+    .status-badge.answered {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--badge-answered);
+    }
+
+    .date-badge {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+    }
+
+    .edit-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: var(--accent);
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+
+    .edit-btn:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+    }
+
+    .question-content {
+        margin: 1rem 0;
+    }
+
+    .question-text,
+    .answer-text {
+        margin: 0 0 1rem;
+        line-height: 1.6;
+        color: var(--text-main);
+    }
+
+    .question-text strong,
+    .answer-text strong {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-main);
+    }
+
+    .no-answer-text {
+        margin: 0;
+        padding: 0.75rem 1rem;
+        background: rgba(245, 158, 11, 0.05);
+        border-radius: 6px;
+        color: var(--badge-pending);
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .question-footer {
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-color);
+        text-align: right;
+    }
+
+    .text-muted {
+        color: var(--text-muted);
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        background: var(--review-card);
+        border-radius: 12px;
+        border: 2px dashed var(--border-color);
+    }
+
+    .empty-icon {
+        font-size: 3rem;
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    .empty-state h3 {
+        margin: 0 0 0.5rem;
+        color: var(--text-main);
+    }
+
+    .empty-state p {
+        margin: 0 0 1.5rem;
+        color: var(--text-muted);
+    }
+
+    .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: var(--accent);
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+    }
+
+    /* Export Section */
+    .export-section {
+        margin-top: 2rem;
+    }
+
+    .export-card {
+        background: var(--review-card);
+        border: 2px solid var(--accent);
+        border-radius: 12px;
+        padding: 1.5rem;
+    }
+
+    .export-info h4 {
+        margin: 0 0 1rem;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .export-info p {
+        margin: 0.5rem 0;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+    }
+
+    .export-code {
+        display: block;
+        background: rgba(0, 0, 0, 0.05);
+        padding: 1rem;
+        border-radius: 6px;
+        margin: 1rem 0;
+        font-family: 'Monaco', 'Courier New', monospace;
+        font-size: 0.9rem;
+        color: var(--text-main);
+        overflow-x: auto;
+    }
+
+    .export-note {
+        margin: 1rem 0 0;
+        padding: 0.75rem 1rem;
+        background: rgba(79, 70, 229, 0.05);
+        border-left: 3px solid var(--accent);
+        border-radius: 4px;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .questions-review-wrapper {
+            padding: 1rem;
+        }
+
+        .review-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .question-item {
+            padding: 1rem;
+        }
+
+        .question-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .edit-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .question-meta {
+            flex-wrap: wrap;
+        }
+
+        .review-tabs {
+            gap: 0.5rem;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+        }
+    }
+</style>
+{% endblock %}

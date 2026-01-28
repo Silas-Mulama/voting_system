@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -333,6 +334,7 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             min-height: 70vh;
         }
+
         /* --- Footer Styling --- */
         .portal-footer {
             background: var(--white);
@@ -745,6 +747,8 @@
             });
         });
     </script>
+
+    {% include 'includes/floating_chatbot.html' %}
 
     {% block extra_js %}{% endblock %}
 </body>

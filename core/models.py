@@ -273,4 +273,31 @@ class SystemStatus(models.Model):
 		return obj
 
 
-
+class BotQuestion(models.Model):
+	"""
+	Stores unanswered user questions for admin review and bot training.
+	Only admin-approved answers are used to retrain the chatbot.
+	"""
+	question = models.TextField(unique=True)
+	answer = models.TextField(blank=True, null=True, help_text="Enter the answer you want the bot to use for this question")
+	is_answered = models.BooleanField(default=False)
+	created_at = models.DateTimeField(auto_now_add=True)
+	updated_at = models.DateTimeField(auto_now=True)
+	
+	class Meta:
+		ordering = ['-created_at']
+		indexes = [
+			models.Index(fields=['-created_at']),
+			models.Index(fields=['is_answered']),
+		]
+	
+	def __str__(self):
+		status = "✓ Answered" if self.is_answered else "✗ Unanswered"
+		return f"[{status}] {self.question[:60]}"
+	
+	def mark_as_answered(self, answer):
+		"""Mark question as answered and save the answer."""
+		self.answer = answer
+		self.is_answered = True
+		self.save()
+		return self

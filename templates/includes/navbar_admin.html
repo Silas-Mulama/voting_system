@@ -9,6 +9,13 @@
             </a>
         </div>
         <div class="navbar-right">
+            <!-- Notification Bell -->
+            <a href="{% url 'bot_questions_review' %}" class="notification-bell" title="Bot Questions Review"
+                id="notificationBell">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+            </a>
+
             <button onclick="toggleTheme()" class="theme-toggle-admin" title="Toggle Dark/Light Mode">
                 <i class="fas fa-adjust"></i>
             </button>
@@ -104,6 +111,7 @@
         color: var(--text-main);
         letter-spacing: -0.5px;
     }
+
     .admin-tag {
         color: var(--primary);
         font-size: 0.8rem;
@@ -125,6 +133,45 @@
         padding: 0.5rem;
     }
 
+    /* Notification Bell */
+    .notification-bell {
+        position: relative;
+        width: 38px;
+        height: 38px;
+        background: var(--bg-body);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-main);
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+    .notification-bell:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+
+    .notification-badge {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #ef4444;
+        color: white;
+        font-size: 0.65rem;
+        font-weight: 700;
+        width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid var(--white);
+        line-height: 1;
+    }
+
     /* Theme Toggle */
     .theme-toggle-admin {
         background: var(--bg-body);
@@ -136,6 +183,7 @@
         cursor: pointer;
         transition: 0.2s;
     }
+
     .theme-toggle-admin:hover {
         border-color: var(--primary);
         color: var(--primary);
@@ -297,6 +345,22 @@
             font-size: 0.8rem;
         }
     }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Update notification badge count from context
+        const badge = document.getElementById('notificationBadge');
+        const count = '{{ unanswered_count }}';
+
+        if (count && parseInt(count) > 0) {
+            badge.textContent = count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    });
+</script>
 </style>
 
 <script>

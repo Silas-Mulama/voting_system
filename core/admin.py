@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Election, Position, Candidate, Vote, AuditLog, SystemStatus
+from .models import User, Election, Position, Candidate, Vote, AuditLog, SystemStatus, BotQuestion
 
 
 @admin.register(User)
@@ -146,4 +146,48 @@ class SystemStatusAdmin(admin.ModelAdmin):
         """Prevent deletion of system status"""
         return False
 
+
+@admin.register(BotQuestion)
+class BotQuestionAdmin(admin.ModelAdmin):
+    list_display = ('status_icon', 'question_short', 'is_answered', 'created_at')
+    list_filter = ('is_answered', 'created_at')
+    search_fields = ('question', 'answer')
+    readonly_fields = ('question', 'created_at', 'updated_at')
+    fieldsets = (
+        ('Question', {
+            'fields': ('question',),
+            'description': 'User question that the bot could not answer with high confidence.'
+        }),
+        ('Answer', {
+            'fields': ('answer', 'is_answered'),
+            'description': 'Provide the answer you want the bot to learn. Mark as answered when complete.'
+        }),
+        ('Metadata', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    def status_icon(self, obj):
+        if obj.is_answered:
+            return '✅ Answered'
+        else:
+            return '⏳ Pending'
+    status_icon.short_description = 'Status'
+    
+    def question_short(self, obj):
+        return obj.question[:60] + '...' if len(obj.question) > 60 else obj.question
+    question_short.short_description = 'Question'
+    
+    def has_delete_permission(self, request, obj=None):
+        """Allow deletion of questions if needed"""
+        return True
+    
+    actions = ['mark_as_answered']
+    
+    def mark_as_answered(self, request, queryset):
+        """Quick action to mark selected questions as answered"""
+        updated = queryset.filter(is_answered=False).update(is_answered=True)
+        self.message_user(request, f'{updated} questions marked as pending answer.')
+    mark_as_answered.short_description = "Mark selected as answered (after filling answers)"
 

@@ -1,0 +1,106 @@
+<!-- Floating Chatbot Icon -->
+{% if user.is_authenticated %}
+<div class="floating-chatbot-container">
+    <a href="{% if user.is_student %}{% url 'chat' %}{% else %}{% url 'admin_chat' %}{% endif %}"
+        class="floating-chatbot-btn"
+        title="{% if user.is_student %}Voting Assistant{% else %}Admin Assistant{% endif %}">
+        <i class="fas fa-robot"></i>
+        <span class="chatbot-tooltip">{% if user.is_student %}Voting Assistant{% else %}Admin Assistant{% endif%}</span>
+    </a>
+</div>
+{% endif %}
+<style>
+    .floating-chatbot-container {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 999;
+        animation: slideInUp 0.5s ease-out;
+    }
+
+    .floating-chatbot-btn {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #7c3aed, #6d28d9);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .floating-chatbot-btn:hover {
+        transform: scale(1.15);
+        box-shadow: 0 12px 35px rgba(124, 58, 237, 0.6);
+    }
+
+    .floating-chatbot-btn:active {
+        transform: scale(0.95);
+    }
+
+    .chatbot-tooltip {
+        position: absolute;
+        bottom: 75px;
+        right: 0;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        white-space: nowrap;
+        font-size: 13px;
+        font-weight: 500;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(10px);
+        transition: all 0.3s ease;
+    }
+
+    .floating-chatbot-btn:hover .chatbot-tooltip {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Dark Mode Support */
+    [data-theme="dark"] .floating-chatbot-btn {
+        box-shadow: 0 8px 25px rgba(168, 85, 247, 0.3);
+    }
+
+    [data-theme="dark"] .floating-chatbot-btn:hover {
+        box-shadow: 0 12px 35px rgba(168, 85, 247, 0.5);
+    }
+
+    /* Responsive for Mobile */
+    @media (max-width: 600px) {
+        .floating-chatbot-container {
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .floating-chatbot-btn {
+            width: 55px;
+            height: 55px;
+            font-size: 22px;
+        }
+
+        .chatbot-tooltip {
+            display: none;
+        }
+    }
+</style>

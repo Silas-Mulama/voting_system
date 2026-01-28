@@ -48,6 +48,11 @@ urlpatterns = [
     # About
     path('about/', views.about, name='about'),
     
+    # Chatbot
+    path('student/chat/', views.chat_view, name='chat'),
+    path('admin/chat/', views.admin_chat_view, name='admin_chat'),
+    path('admin/bot-questions/', views.bot_questions_review, name='bot_questions_review'),
+    
     # Student Profile
     path('student/profile/', views.student_profile, name='student_profile'),
     path('student/profile/edit/', views.student_profile_edit, name='student_profile_edit'),
