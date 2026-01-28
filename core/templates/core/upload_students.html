@@ -27,7 +27,6 @@
                 </div>
 
                 {% if form.file.errors %}
-<<<<<<< HEAD
                 <div class="alert alert-error">
                     <i class="fas fa-exclamation-circle"></i> {{ form.file.errors.0 }}
                 </div>
@@ -52,15 +51,6 @@
 
                 <div class="form-actions">
                     <button type="submit" class="btn-import" id="submit-btn">
-=======
-                    <div class="alert alert-error">
-                        <i class="fas fa-exclamation-circle"></i> {{ form.file.errors.0 }}
-                    </div>
-                {% endif %}
-
-                <div class="form-actions">
-                    <button type="submit" class="btn-import">
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                         <i class="fas fa-file-import"></i> Process Import
                     </button>
                     <p class="help-text">Max file size: 5MB (.csv, .xlsx)</p>
@@ -70,12 +60,8 @@
             <section class="example-section">
                 <div class="example-header">
                     <h3>Data Format Preview</h3>
-<<<<<<< HEAD
                     <button class="btn-text-only" onclick="downloadSample()"><i class="fas fa-download"></i> Sample
                         CSV</button>
-=======
-                    <button class="btn-text-only" onclick="downloadSample()"><i class="fas fa-download"></i> Sample CSV</button>
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                 </div>
                 <div class="table-wrapper">
                     <table class="table-example">
@@ -83,29 +69,18 @@
                             <tr>
                                 <th>admission_number</th>
                                 <th>full_name</th>
-<<<<<<< HEAD
                                 <th>email</th>
                                 <th>programme</th>
                                 <th>year_of_study</th>
-=======
-                                <th>class_form</th>
-                                <th>email</th>
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td><span class="code-text">DICT/01542/24S</span></td>
-<<<<<<< HEAD
                                 <td>Brian Omondi</td>
                                 <td>brian.omondi@buteretti.ac.ke</td>
                                 <td>DICT</td>
                                 <td>1</td>
-=======
-                                <td>John Doe</td>
-                                <td>Year 1</td>
-                                <td>john@example.com</td>
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
                             </tr>
                         </tbody>
                     </table>
@@ -139,7 +114,6 @@
 </div>
 
 <style>
-<<<<<<< HEAD
     /* Layout */
     .upload-container {
         max-width: 1100px;
@@ -453,114 +427,6 @@
             grid-template-columns: 1fr;
         }
     }
-=======
-/* Layout */
-.upload-container { max-width: 1100px; margin: 0 auto; }
-.upload-grid { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; align-items: start; }
-
-/* Drop Zone */
-.drop-zone {
-    background: var(--card-bg);
-    border: 2px dashed var(--border-color);
-    border-radius: 16px;
-    padding: 3rem 2rem;
-    text-align: center;
-    transition: 0.3s;
-    position: relative;
-    cursor: pointer;
-}
-.drop-zone:hover, .drop-zone.drag-over {
-    border-color: var(--primary);
-    background: var(--primary-light);
-}
-
-.drop-zone-content { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
-.upload-icon { font-size: 3rem; color: var(--primary); opacity: 0.8; }
-.drop-zone-prompt { color: var(--text-main); font-size: 1.1rem; }
-.drop-zone input[type="file"] {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0; left: 0;
-    opacity: 0;
-    cursor: pointer;
-}
-
-.file-info-hidden { display: none; margin-top: 1rem; font-weight: 600; color: var(--primary); }
-.file-info-active { display: block; }
-
-/* Buttons & Actions */
-.form-actions { margin-top: 1.5rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
-.btn-import {
-    background: var(--primary);
-    color: white;
-    border: none;
-    padding: 0.8rem 2rem;
-    border-radius: 10px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.2s;
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.btn-import:hover { background: var(--primary-hover); transform: translateY(-2px); }
-.help-text { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
-
-.btn-text-only { 
-    background: none; 
-    border: none; 
-    color: var(--primary); 
-    font-weight: 600; 
-    cursor: pointer; 
-    padding: 0.5rem;
-    min-height: 40px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: 0.2s;
-}
-.btn-text-only:hover { opacity: 0.8; }
-.instructions-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    padding: 1.5rem;
-    border-radius: 16px;
-}
-.instruction-list { list-style: none; padding: 0; margin: 1.5rem 0; }
-.instruction-list li { margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 4px; }
-.instruction-list li strong { font-size: 0.9rem; color: var(--text-main); }
-.instruction-list li span { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
-
-.security-note {
-    font-size: 0.75rem;
-    color: #10b981;
-    background: #ecfdf5;
-    padding: 8px;
-    border-radius: 6px;
-    text-align: center;
-}
-
-/* Example Table */
-.example-section { margin-top: 2.5rem; }
-.example-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-.table-wrapper { 
-    background: var(--card-bg); 
-    border-radius: 12px; 
-    border: 1px solid var(--border-color); 
-    overflow: hidden; 
-}
-.table-example { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-.table-example th { background: var(--bg-body); padding: 12px; text-align: left; color: var(--text-muted); font-weight: 600; }
-.table-example td { padding: 12px; border-top: 1px solid var(--border-color); color: var(--text-main); }
-.code-text { font-family: monospace; font-weight: 700; color: var(--primary); }
-.btn-text-only { background: none; border: none; color: var(--primary); font-weight: 600; cursor: pointer; }
-
-@media (max-width: 850px) {
-    .upload-grid { grid-template-columns: 1fr; }
-}
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 </style>
 
 <script>
@@ -568,7 +434,6 @@
     const dropZone = document.getElementById('drop-zone');
     const fileName = document.getElementById('file-name');
     const fileInfo = document.getElementById('file-info');
-<<<<<<< HEAD
     const uploadForm = document.getElementById('upload-form');
     const submitBtn = document.getElementById('submit-btn');
     const progressSection = document.getElementById('progress-section');
@@ -579,8 +444,6 @@
     const progressMessage = document.getElementById('progress-message');
 
     let progressInterval = null;
-=======
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
 
     fileInput.addEventListener('change', (e) => {
         if (fileInput.files.length) {
@@ -597,7 +460,6 @@
         dropZone.addEventListener(eventName, () => dropZone.classList.remove('drag-over'), false);
     });
 
-<<<<<<< HEAD
     // Handle form submission
     uploadForm.addEventListener('submit', (e) => {
         if (!fileInput.files.length) {
@@ -678,11 +540,6 @@
         a.click();
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
-=======
-    function downloadSample() {
-        // Simple logic to trigger a CSV download if needed
-        alert("Downloading sample CSV...");
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
     }
 </script>
 {% endblock %}

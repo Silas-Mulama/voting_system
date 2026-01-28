@@ -5,7 +5,6 @@
 {% block content %}
 <div class="edit-profile-container">
     <h1>Edit Profile</h1>
-<<<<<<< HEAD
 
     {% if messages %}
     {% for message in messages %}
@@ -13,20 +12,10 @@
         {{ message }}
     </div>
     {% endfor %}
-=======
-    
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-                {{ message }}
-            </div>
-        {% endfor %}
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
     {% endif %}
 
     <form method="post" enctype="multipart/form-data" class="profile-form">
         {% csrf_token %}
-<<<<<<< HEAD
 
         <div class="form-group">
             <label for="profile_picture">Profile Picture</label>
@@ -35,25 +24,10 @@
                 <img src="{{ profile_user.profile_picture.url }}" alt="Current profile picture">
                 <p><small>Current picture</small></p>
             </div>
-=======
-        
-        <div class="form-group">
-            <label for="profile_picture">Profile Picture</label>
-            {% if profile_user.profile_picture %}
-                <div class="current-picture">
-                    <img src="{{ profile_user.profile_picture.url }}" alt="Current profile picture">
-                    <p><small>Current picture</small></p>
-                </div>
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
             {% endif %}
             <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
             <small class="help-text">JPG, PNG up to 5MB</small>
         </div>
-<<<<<<< HEAD
-
-=======
-        
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         <div class="form-group">
             <label for="full_name">Full Name</label>
             <input type="text" id="full_name" name="full_name" value="{{ profile_user.full_name }}" required>
@@ -67,17 +41,12 @@
 
         <div class="form-group">
             <label for="admission_number">Admission Number (Cannot be changed)</label>
-<<<<<<< HEAD
             <input type="text" id="admission_number" name="admission_number" value="{{ profile_user.admission_number }}"
                 disabled>
-=======
-            <input type="text" id="admission_number" name="admission_number" value="{{ profile_user.admission_number }}" disabled>
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
             <small class="help-text">Contact administrator to change admission number</small>
         </div>
 
         <div class="form-group">
-<<<<<<< HEAD
             <label for="programme">Programme (Cannot be changed)</label>
             <input type="text" id="programme" name="programme" value="{{ profile_user.programme }}" disabled>
             <small class="help-text">Contact administrator to change programme</small>
@@ -88,11 +57,6 @@
             <input type="number" id="year_of_study" name="year_of_study" value="{{ profile_user.year_of_study }}"
                 disabled>
             <small class="help-text">Contact administrator to change year of study</small>
-=======
-            <label for="class_form">Class (Cannot be changed)</label>
-            <input type="text" id="class_form" name="class_form" value="{{ profile_user.class_form }}" disabled>
-            <small class="help-text">Contact administrator to change class</small>
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18
         </div>
 
         <div class="form-actions">
@@ -103,7 +67,6 @@
 </div>
 
 <style>
-<<<<<<< HEAD
     .edit-profile-container {
         max-width: 600px;
         margin: 0 auto;
@@ -311,210 +274,3 @@
     }
 </style>
 {% endblock %}
-=======
-.edit-profile-container {
-    max-width: 600px;
-    margin: 0 auto;
-    color: var(--text-main);
-}
-
-.edit-profile-container h1 {
-    margin-top: 0;
-    margin-bottom: 2rem;
-    font-size: 1.75rem;
-    font-weight: 700;
-}
-
-.alert {
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
-    font-weight: 500;
-}
-
-.alert-success {
-    background: rgba(34, 197, 94, 0.1);
-    border: 1px solid rgba(34, 197, 94, 0.3);
-    color: #22c55e;
-}
-
-.alert-error {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #ef4444;
-}
-
-.profile-form {
-    background: var(--card-bg);
-    padding: 2rem;
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-}
-
-.current-picture {
-    margin-bottom: 1rem;
-    text-align: center;
-}
-
-.current-picture img {
-    max-width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px;
-    border: 2px solid var(--border-color);
-}
-
-.current-picture p {
-    margin: 0.5rem 0 0 0;
-    color: var(--text-muted);
-}
-
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: var(--text-main);
-}
-
-.form-group input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-size: 1rem;
-    background: var(--bg-body);
-    color: var(--text-main);
-    transition: 0.2s;
-    box-sizing: border-box;
-}
-
-.form-group input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 5px rgba(79, 70, 229, 0.2);
-}
-
-.form-group input:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    background: var(--border-color);
-}
-
-.help-text {
-    display: block;
-    margin-top: 0.35rem;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-}
-
-.form-actions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
-}
-
-.btn {
-    flex: 1;
-    padding: 0.75rem 1.5rem;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    transition: 0.2s;
-    display: inline-block;
-    text-align: center;
-}
-
-.btn-primary {
-    background: var(--primary);
-    color: white;
-}
-
-.btn-primary:hover {
-    opacity: 0.9;
-    transform: translateY(-2px);
-}
-
-.btn-secondary {
-    background: var(--border-color);
-    color: var(--text-main);
-}
-
-.btn-secondary:hover {
-    border-color: var(--primary);
-    background: var(--bg-body);
-    color: var(--primary);
-}
-
-@media (max-width: 992px) {
-    .edit-profile-container {
-        max-width: 100%;
-    }
-
-    .profile-form {
-        padding: 1.5rem;
-    }
-
-    .form-actions {
-        gap: 0.75rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .edit-profile-container {
-        padding: 0 1rem;
-    }
-
-    .profile-form {
-        padding: 1.25rem;
-    }
-
-    input, textarea {
-        font-size: 0.95rem;
-        padding: 0.65rem;
-    }
-
-    .btn {
-        min-height: 44px;
-        padding: 0.65rem 1rem;
-    }
-
-    .form-actions {
-        gap: 0.5rem;
-    }
-}
-
-@media (max-width: 600px) {
-    .edit-profile-container {
-        padding: 0 1rem;
-    }
-
-    .profile-form {
-        padding: 1rem;
-    }
-
-    input, textarea {
-        font-size: 0.9rem;
-        padding: 0.6rem;
-    }
-
-    .btn {
-        width: 100%;
-        min-height: 44px;
-        padding: 0.6rem 1rem;
-        font-size: 0.9rem;
-    }
-
-    .form-actions {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-}
-</style>
-{% endblock %}
->>>>>>> fda6d5ef726056f0c8eabf2946f19a342a16bf18

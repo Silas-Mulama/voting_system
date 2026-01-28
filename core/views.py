@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth import authenticate, login, logout, get_user_model, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.contrib import messages
@@ -1066,9 +1066,11 @@ def student_change_password(request):
 		else:
 			user.set_password(new_password)
 			user.save()
-			messages.success(request, 'Password changed successfully. Please log in again.')
+			# Keep user logged in after password change
+			update_session_auth_hash(request, user)
+			messages.success(request, 'Password changed successfully!')
 			log_audit_event(request, 'password_changed', 'Student changed password', user)
-			return redirect('student_login')
+			return redirect('student_dashboard')
 	
 	return render(request, 'core/student_change_password.html')
 

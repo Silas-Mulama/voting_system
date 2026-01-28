@@ -70,61 +70,6 @@
         <p>Ready to start the voting process? Create your first election below.</p>
         <a href="{% url 'election_create' %}" class="btn-create">Get Started</a>
     </div>
-        <div class="elections-grid">
-            {% for election in elections %}
-                <div class="election-card">
-                    <div class="card-top">
-                        <span class="status-badge status-{{ election.status }}">
-                            <i class="fas fa-circle"></i> {{ election.get_status_display }}
-                        </span>
-                        <div class="dropdown-actions">
-                             <i class="fas fa-ellipsis-v"></i>
-                             <div class="dropdown-content">
-                                <a href="{% url 'election_update' election.pk %}"><i class="fas fa-edit"></i> Edit</a>
-                                <form method="post" action="{% url 'election_delete' election.pk %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="delete-btn" onclick="return confirm('Archive this election?')">
-                                        <i class="fas fa-trash-alt"></i> Delete
-                                    </button>
-                                </form>
-                             </div>
-                        </div>
-                    </div>
-
-                    <div class="card-body">
-                        <h3>{{ election.title }}</h3>
-                        <p class="description">{{ election.description|truncatewords:15 }}</p>
-                        
-                        <div class="election-timeline">
-                            <div class="timeline-item">
-                                <i class="far fa-calendar-check"></i>
-                                <span><strong>Starts:</strong> {{ election.start_datetime|date:"M d, Y" }}</span>
-                            </div>
-                            <div class="timeline-item">
-                                <i class="far fa-calendar-times"></i>
-                                <span><strong>Ends:</strong> {{ election.end_datetime|date:"M d, Y" }}</span>
-                            </div>
-                        </div>
-
-                        <div class="card-footer">
-                            <div class="info-pill">
-                                <i class="fas fa-layer-group"></i> {{ election.positions.count }} Positions
-                            </div>
-                            <a href="{% url 'election_detail' election.pk %}" class="btn-manage">
-                                Manage <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <div class="empty-state">
-            <div class="empty-icon">🗳️</div>
-            <h3>No Elections Found</h3>
-            <p>Ready to start the voting process? Create your first election below.</p>
-            <a href="{% url 'election_create' %}" class="btn-create">Get Started</a>
-        </div>
     {% endif %}
 </div>
 
